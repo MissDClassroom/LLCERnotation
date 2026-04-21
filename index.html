@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Corrections LLCER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1a1a2e;
+  --cream:#f5f0e8;
+  --rust:#c0392b;
+  --rust-d:#a93226;
+  --gold:#d4a843;
+  --muted:#6b6b7a;
+  --card:#ffffff;
+  --border:#e0d9cc;
+  --success:#2e7d32;
+  --success-bg:#f0fff4;
+
+  --a1:#c0392b;--a1-bg:#fff5f5;--a1-bd:#feb2b2;--a1-bar:#fc8181;
+  --a2:#c05621;--a2-bg:#fffaf0;--a2-bd:#fbd38d;--a2-bar:#f6ad55;
+  --b1:#744210;--b1-bg:#fffff0;--b1-bd:#f6e05e;--b1-bar:#ecc94b;
+  --b2:#1a365d;--b2-bg:#ebf8ff;--b2-bd:#90cdf4;--b2-bar:#63b3ed;
+  --c1:#1c4532;--c1-bg:#f0fff4;--c1-bd:#9ae6b4;--c1-bar:#68d391;
+  --c2:#44337a;--c2-bg:#faf5ff;--c2-bd:#d6bcfa;--c2-bar:#b794f4;
+  --ecrite-bg:#ebf8ff;--ecrite-t:#1a365d;--ecrite-bd:#90cdf4;
+  --orale-bg:#f0fff4;--orale-t:#1c4532;--orale-bd:#9ae6b4;
+  --trad-bg:#fffaf0;--trad-t:#c05621;--trad-bd:#fbd38d;
+  --trans-bg:#faf5ff;--trans-t:#44337a;--trans-bd:#d6bcfa;
+  --radius:8px;--radius-lg:12px;
+}
+
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.5;}
+.app-shell{max-width:1040px;margin:0 auto;padding:0 0 5rem;}
+input,select,textarea{font-family:'DM Sans',system-ui,sans-serif;font-size:13px;}
+
+/* ── HEADER ── */
+.app-header{background:var(--ink);color:var(--cream);padding:1.75rem 2rem 0;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;padding-bottom:1.25rem;}
+h1{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--cream);line-height:1.15;letter-spacing:-.01em;}
+h1 span{color:var(--gold);}
+.subtitle{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;}
+.header-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.save-badge{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);}
+.btn-header{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);cursor:pointer;transition:all .15s;}
+.btn-header:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);}
+.btn-header-danger{border-color:rgba(192,57,43,.5);background:rgba(192,57,43,.15);color:#f5b7b1;}
+.btn-header-danger:hover{background:rgba(192,57,43,.3);}
+
+/* ── NAV ── */
+.nav-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.1);margin-top:.25rem;}
+.nav-tab{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:10px 18px;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.5);cursor:pointer;background:transparent;transition:all .15s;margin-bottom:-1px;white-space:nowrap;}
+.nav-tab:hover{color:rgba(255,255,255,.85);}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.page{display:none;}.page.active{display:block;}
+.page-body{padding:2rem 2rem;}
+
+/* ── CHIPS NIVEAUX ── */
+.chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid;letter-spacing:.05em;font-family:'DM Sans',sans-serif;}
+.chip-a1{background:var(--a1-bg);color:var(--a1);border-color:var(--a1-bd);}
+.chip-a2{background:var(--a2-bg);color:var(--a2);border-color:var(--a2-bd);}
+.chip-b1{background:var(--b1-bg);color:var(--b1);border-color:var(--b1-bd);}
+.chip-b2{background:var(--b2-bg);color:var(--b2);border-color:var(--b2-bd);}
+.chip-c1{background:var(--c1-bg);color:var(--c1);border-color:var(--c1-bd);}
+.chip-c2{background:var(--c2-bg);color:var(--c2);border-color:var(--c2-bd);}
+
+/* ── LAYOUT ── */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;}
+.topbar h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ink);}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.stat-card{background:var(--card);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;border:1px solid var(--border);position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rust),var(--gold));}
+.stat-label{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.1em;}
+.stat-value{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--ink);line-height:1;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* ── CONTRÔLES ── */
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.1rem;}
+.controls input[type=text]{flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--ink);transition:border-color .15s;}
+.controls input[type=text]:focus{outline:none;border-color:var(--gold);}
+.controls select{padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--ink);}
+
+/* ── BOUTONS ── */
+.btn-sm{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 15px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap;transition:all .15s;letter-spacing:.02em;}
+.btn-sm:hover{border-color:var(--ink);background:var(--cream);}
+.btn-primary{background:var(--rust);color:#fff;border-color:var(--rust);}
+.btn-primary:hover{background:var(--rust-d);border-color:var(--rust-d);}
+.btn-cancel{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 15px;border-radius:var(--radius);border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .12s;}
+.btn-cancel:hover{background:var(--cream);}
+
+/* ── CARTES ÉLÈVES ── */
+.student-list{display:flex;flex-direction:column;gap:8px;}
+.s-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;cursor:pointer;transition:all .15s;}
+.s-card:hover{border-color:var(--rust);box-shadow:0 4px 16px rgba(192,57,43,.1);transform:translateY(-1px);}
+.s-header{display:flex;align-items:center;gap:12px;}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;letter-spacing:.04em;}
+.s-name{font-size:14px;font-weight:600;color:var(--ink);}
+.s-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.s-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+/* ── FICHE ── */
+.back-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px;margin-bottom:1.25rem;background:none;border:none;padding:0;letter-spacing:.03em;text-transform:uppercase;}
+.back-btn:hover{color:var(--ink);}
+.section-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin:1.5rem 0 .875rem;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;}
+.skill-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.skill-name{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.skill-bar-bg{height:7px;background:var(--cream);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.skill-bar{height:100%;border-radius:4px;transition:width .35s;}
+.skill-edit{display:flex;gap:3px;flex-wrap:wrap;margin-top:7px;}
+.lvl-btn{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .12s;letter-spacing:.04em;}
+.lvl-btn:hover{border-color:var(--gold);color:var(--ink);}
+.prod-tabs{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;}
+.prod-tab{font-size:12px;font-weight:600;padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.03em;}
+.prod-tab.active{background:var(--ink);color:var(--cream);border-color:var(--ink);}
+.prod-list{display:flex;flex-direction:column;gap:10px;}
+.prod-card{background:var(--card);border-radius:var(--radius-lg);padding:1rem 1.25rem;border:1.5px solid var(--border);}
+.prod-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
+.prod-title{font-size:14px;font-weight:600;color:var(--ink);}
+.prod-date{font-size:11px;color:var(--muted);margin-top:2px;}
+.grille-result-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.grille-crit-name{font-size:11px;color:var(--muted);flex:1;min-width:110px;}
+.grille-crit-bar{flex:2;height:8px;border-radius:4px;background:var(--cream);overflow:hidden;border:1px solid var(--border);}
+.grille-crit-fill{height:100%;border-radius:4px;transition:width .3s;}
+.note-display{font-size:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.note-box{background:var(--b2-bg,#ebf8ff);color:#1a365d;border:1.5px solid var(--b2-bd,#90cdf4);border-radius:var(--radius);padding:4px 14px;font-size:13px;font-weight:700;}
+.note-box-total{background:var(--ink);color:var(--cream);border-radius:var(--radius);padding:5px 18px;font-size:14px;font-weight:700;}
+.conseils-section{border-radius:var(--radius-lg);padding:1rem;border:1.5px solid;}
+.conseil-item{font-size:11px;margin-bottom:5px;display:flex;gap:7px;line-height:1.5;}
+.empty-state{text-align:center;padding:3rem;color:var(--muted);font-size:13px;}
+
+/* ── VUE CLASSE ── */
+.classe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;}
+.classe-cell{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:.875rem;text-align:center;cursor:pointer;transition:all .15s;}
+.classe-cell:hover{border-color:var(--rust);transform:translateY(-1px);}
+.trend-bars{display:flex;align-items:flex-end;gap:2px;height:22px;justify-content:center;margin:7px 0 5px;}
+.trend-bars span{width:5px;border-radius:2px 2px 0 0;display:block;}
+
+/* ── DEVOIRS ── */
+.devoir-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;}
+
+/* ── MODALES ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(26,26,46,.55);backdrop-filter:blur(3px);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--card);border-radius:var(--radius-lg);padding:2rem;width:660px;max-width:97vw;max-height:93vh;overflow-y:auto;border:1.5px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.2);}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:1.25rem;color:var(--ink);}
+.modal-label{font-size:10px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;margin-top:14px;text-transform:uppercase;letter-spacing:.1em;}
+.modal input[type=text],.modal input[type=date],.modal select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--cream);color:var(--ink);}
+.modal input:focus,.modal select:focus{outline:none;border-color:var(--gold);}
+.modal textarea{width:100%;height:72px;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:inherit;resize:vertical;color:var(--ink);background:var(--cream);}
+.modal-actions{display:flex;gap:8px;margin-top:1.5rem;justify-content:flex-end;}
+
+/* ── ÉPREUVES ── */
+.epreuve-selector{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ep-btn{font-size:12px;font-weight:600;padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--muted);cursor:pointer;transition:all .15s;}
+.ep-btn:hover{border-color:var(--ink);color:var(--ink);}
+.ep-ecrite.sel{background:var(--ecrite-bg);color:var(--ecrite-t);border-color:var(--ecrite-bd);}
+.ep-orale.sel{background:var(--orale-bg);color:var(--orale-t);border-color:var(--orale-bd);}
+.ep-traduction.sel{background:var(--trad-bg);color:var(--trad-t);border-color:var(--trad-bd);}
+.ep-transposition.sel{background:var(--trans-bg);color:var(--trans-t);border-color:var(--trans-bd);}
+.combo-preview{font-size:11px;font-weight:600;color:var(--muted);margin-top:10px;padding:8px 14px;background:var(--cream);border-radius:var(--radius);border:1.5px solid var(--border);}
+
+/* ── CORRECTION ── */
+.epreuve-block{border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:12px;background:var(--card);}
+.epreuve-title{font-size:13px;font-weight:700;margin-bottom:.9rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.epreuve-tag{font-size:10px;font-weight:700;padding:3px 11px;border-radius:20px;border:1.5px solid;letter-spacing:.05em;}
+.corr-crit-row{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.corr-crit-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.corr-crit-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.corr-crit-levels{display:flex;gap:5px;flex-wrap:wrap;}
+.corr-lvl-btn{font-size:11px;font-weight:700;padding:6px 13px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px;letter-spacing:.04em;}
+.corr-lvl-btn:hover{border-color:var(--gold);color:var(--ink);}
+.corr-lvl-btn .pts{font-size:10px;opacity:.55;}
+.score-epreuve{font-size:13px;margin-top:10px;padding:10px 14px;background:var(--cream);border-radius:var(--radius);border:1.5px solid var(--border);}
+.score-live-global{background:#f0fff4;border:1.5px solid var(--c1-bd);border-radius:var(--radius-lg);padding:12px 18px;margin-top:12px;}
+.score-grand-total{display:flex;justify-content:space-between;align-items:center;}
+.grand-total-label{font-size:13px;font-weight:700;color:var(--success);}
+.grand-total-note{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;background:var(--success);padding:5px 22px;border-radius:var(--radius);}
+
+/* ── TOOLTIPS ── */
+.tip-wrap{position:relative;display:inline-block;}
+.tip-wrap .tip{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--cream);font-size:11px;line-height:1.6;padding:10px 14px;border-radius:8px;
+  width:280px;z-index:999;pointer-events:none;white-space:normal;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+.tip-wrap .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--ink);}
+.tip-wrap:hover .tip{display:block;}
+
+/* ── AUDIO ── */
+.audio-recorder-block{background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;}
+.audio-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.audio-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em;}
+.audio-btn:hover:not(:disabled){border-color:var(--ink);background:var(--cream);}
+.audio-btn:disabled{opacity:.3;cursor:not-allowed;}
+.audio-btn-rec{background:#fff5f5;color:var(--rust);border-color:#feb2b2;}
+.audio-btn-rec.recording{background:var(--rust);color:#fff;border-color:var(--rust);animation:pulse-rec 1.2s ease-in-out infinite;}
+.audio-btn-pause{background:#fffff0;color:#744210;border-color:#f6e05e;}
+.audio-btn-pause.paused{background:#744210;color:#fff;border-color:#744210;}
+.audio-btn-stop{background:#fffaf0;color:var(--rust);border-color:#fbd38d;}
+.audio-timer{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);min-width:44px;font-variant-numeric:tabular-nums;}
+.audio-wave{display:flex;align-items:flex-end;gap:2px;height:32px;padding:0 4px;margin-top:4px;}
+.wave-bar{width:4px;border-radius:2px;background:var(--border);height:4px;transition:height .08s;}
+.wave-bar.active{background:var(--rust);}
+.audio-status{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;}
+@keyframes pulse-rec{0%,100%{opacity:1;}50%{opacity:.6;}}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;}
+
+/* ── CALCULATRICE ── */
+.calc-box{background:#fffbf2;border:1.5px solid #f6e05e;border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-top:12px;}
+.calc-title{font-size:10px;font-weight:700;color:#744210;margin-bottom:10px;text-transform:uppercase;letter-spacing:.1em;}
+.calc-line{display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:5px;flex-wrap:wrap;}
+.calc-op{color:#744210;font-weight:700;font-size:15px;}
+.calc-val{font-weight:700;color:var(--ink);background:var(--card);border:1.5px solid #f6e05e;border-radius:6px;padding:2px 10px;min-width:34px;text-align:center;}
+.calc-eq{color:#744210;}
+.calc-result{font-size:14px;font-weight:700;color:var(--success);background:#f0fff4;border:1.5px solid var(--c1-bd);border-radius:var(--radius);padding:3px 14px;}
+.calc-result-big{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff;background:var(--success);border-radius:var(--radius);padding:5px 20px;}
+
+/* ── PANNEAU CONSEILS ── */
+.panneau-conseils{display:none;position:fixed;inset:0;background:rgba(26,26,46,.45);backdrop-filter:blur(3px);z-index:300;align-items:flex-start;justify-content:flex-end;}
+.panneau-conseils.open{display:flex;}
+.panneau-inner{background:var(--card);width:540px;max-width:98vw;height:100vh;overflow-y:auto;padding:1.75rem;display:flex;flex-direction:column;border-left:1.5px solid var(--border);box-shadow:-16px 0 48px rgba(26,26,46,.2);}
+.panneau-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;gap:8px;}
+.panneau-titre{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink);line-height:1.3;}
+.panneau-close{background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;cursor:pointer;color:var(--muted);flex-shrink:0;padding:5px 11px;transition:all .12s;}
+.panneau-close:hover{background:var(--border);color:var(--ink);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);font-size:12px;font-weight:600;padding:10px 22px;border-radius:20px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:400;white-space:nowrap;box-shadow:0 8px 24px rgba(26,26,46,.3);letter-spacing:.03em;}
+.toast.show{opacity:1;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="app-header">
+    <div class="header-top">
+      <div>
+        <h1>Corrections <span>LLCER</span></h1>
+        <p class="subtitle">Suivi des compétences · Grilles officielles MEN · Terminale LLCER</p>
+      </div>
+      <div class="header-actions">
+        <span id="save-indicator" class="save-badge">Aucune sauvegarde</span>
+        <button class="btn-header" onclick="exportJSON()">↓ Exporter</button>
+        <label class="btn-header" style="cursor:pointer;margin:0">↑ Importer<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
+        <button class="btn-header btn-header-danger" onclick="clearData()">✕ Effacer</button>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('eleves')">Élèves</button>
+      <button class="nav-tab" onclick="showPage('classe')">Vue classe</button>
+      <button class="nav-tab" onclick="showPage('devoirs')">Devoirs</button>
+    </div>
+  </div><!-- fin app-header -->
+
+  <div class="page-body">
+  <div class="page active" id="page-eleves">
+    <div class="topbar"><h2>Suivi des élèves</h2><div style="display:flex;gap:8px"><button class="btn-sm" onclick="openModal('modal-classes')">⊞ Classes</button><button class="btn-sm btn-primary" onclick="openModal('modal-eleve')">+ Ajouter un·e élève</button></div></div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="controls">
+      <input type="text" placeholder="Rechercher..." id="search-input" oninput="renderList()" />
+      <select id="filter-classe" onchange="renderList()"><option value="">Toutes les classes</option></select>
+      <select id="filter-level" onchange="renderList()"><option value="">Tous niveaux</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select>
+    </div>
+    <div class="student-list" id="student-list"></div>
+  </div>
+
+  <div class="page" id="page-fiche">
+    <button class="back-btn" onclick="showPage('eleves')">← Retour à la liste</button>
+    <div id="fiche-content"></div>
+  </div>
+
+  <div class="page" id="page-classe">
+    <div class="topbar"><h2>Vue classe</h2></div>
+    <div style="margin-bottom:1rem"><select id="classe-devoir-filter" style="padding:8px 12px;border:1.5px solid var(--b);border-radius:var(--radius);font-size:13px;background:var(--s);" onchange="renderClasse()"><option value="">Toutes productions</option></select></div>
+    <div class="classe-grid" id="classe-grid"></div>
+  </div>
+
+  <div class="page" id="page-devoirs">
+    <div class="topbar"><h2>Devoirs</h2><button class="btn-sm btn-primary" onclick="openModal('modal-devoir')">+ Nouveau devoir</button></div>
+    <div id="devoirs-list"></div>
+  </div>
+  </div><!-- fin page-body -->
+</div>
+
+<!-- MODAL ÉLÈVE -->
+<div class="modal-bg" id="modal-eleve">
+  <div class="modal">
+    <h3>Nouvel·le élève</h3>
+    <label class="modal-label">Nom complet</label><input type="text" id="new-name" placeholder="Prénom Nom" />
+    <label class="modal-label">Classe</label>
+    <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+      <select id="new-classe" style="flex:1;padding:7px 10px;border:1px solid var(--b);border-radius:var(--radius);font-size:13px;background:var(--s);color:var(--t)"></select>
+    </div>
+    <label class="modal-label" style="margin-top:10px">Genre</label>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:7px 14px;border-radius:var(--radius);border:1px solid var(--b);background:var(--sl);flex:1;justify-content:center">
+        <input type="radio" name="new-genre" value="F" checked style="accent-color:#0058b9"> Elle
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:7px 14px;border-radius:var(--radius);border:1px solid var(--b);background:var(--sl);flex:1;justify-content:center">
+        <input type="radio" name="new-genre" value="M" style="accent-color:#0058b9"> Il
+      </label>
+    </div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-eleve')">Annuler</button><button class="btn-sm btn-primary" onclick="addStudent()">Ajouter</button></div>
+  </div>
+</div>
+
+<!-- MODAL DEVOIR -->
+<div class="modal-bg" id="modal-devoir">
+  <div class="modal">
+    <h3>Nouveau devoir</h3>
+    <label class="modal-label">Titre</label><input type="text" id="dev-titre" placeholder="Ex : Bac Blanc n°1" />
+    <label class="modal-label">Épreuve(s) — une ou deux</label>
+    <div class="epreuve-selector">
+      <button class="ep-btn ep-ecrite" onclick="toggleEpreuve('ecrite',this)">Expression écrite</button>
+      <button class="ep-btn ep-orale" onclick="toggleEpreuve('orale',this)">Expression orale</button>
+      <button class="ep-btn ep-traduction" onclick="toggleEpreuve('traduction',this)">Traduction (Version)</button>
+      <button class="ep-btn ep-transposition" onclick="toggleEpreuve('transposition',this)">Transposition</button>
+    </div>
+    <div class="combo-preview" id="combo-preview">Sélectionnez au moins une épreuve.</div>
+    <label class="modal-label">Date</label><input type="date" id="dev-date" />
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-devoir')">Annuler</button><button class="btn-sm btn-primary" onclick="addDevoir()">Créer</button></div>
+  </div>
+</div>
+
+<!-- MODAL CORRECTION -->
+<div class="modal-bg" id="modal-correction">
+  <div class="modal">
+    <h3 id="corr-modal-title">Correction</h3>
+    <div id="corr-modal-body"></div>
+    <div class="score-live-global" id="score-live-global" style="display:none"></div>
+    <label class="modal-label">Commentaire général</label>
+    <textarea id="corr-commentaire" placeholder="Points forts, axes de progression..."></textarea>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-correction')">Annuler</button><button class="btn-sm btn-primary" onclick="saveCorrection()">Enregistrer</button></div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION EFFACER TOUT -->
+<div class="modal-bg" id="modal-confirm-clear">
+  <div class="modal" style="max-width:400px">
+    <h3 style="color:#9b1c1c">Effacer toutes les données ?</h3>
+    <p style="font-size:13px;color:var(--tm);margin:8px 0 1.25rem;line-height:1.6">Élèves, devoirs, corrections et conseils seront définitivement supprimés. Cette action est irréversible.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-confirm-clear')">Annuler</button>
+      <button class="btn-sm" style="background:#9b1c1c;color:#fff;border-color:#9b1c1c" onclick="clearDataConfirmed()">Oui, tout effacer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION SUPPRIMER DEVOIR -->
+<div class="modal-bg" id="modal-confirm-delete">
+  <div class="modal" style="max-width:420px">
+    <h3 style="color:#9b1c1c">Supprimer ce devoir ?</h3>
+    <p id="modal-confirm-delete-titre" style="font-size:13px;color:var(--tm);margin:8px 0 1.25rem;line-height:1.6"></p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-confirm-delete')">Annuler</button>
+      <button class="btn-sm" style="background:#9b1c1c;color:#fff;border-color:#9b1c1c" onclick="supprimerDevoirConfirmed()">Oui, supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GESTION CLASSES -->
+<div class="modal-bg" id="modal-classes">
+  <div class="modal" style="max-width:420px">
+    <h3>Gérer les classes</h3>
+    <div id="classes-list" style="margin-bottom:1rem"></div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="new-classe-nom" placeholder="Nom de la classe (ex: Terminale 1)" style="flex:1;padding:7px 10px;border:1px solid var(--b);border-radius:var(--radius);font-size:13px" />
+      <button class="btn-sm btn-primary" onclick="ajouterClasse()">+ Ajouter</button>
+    </div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-classes')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- MODAL QR CODE -->
+<div class="modal-bg" id="modal-qr">
+  <div class="modal" style="max-width:480px;text-align:center">
+    <h3 style="margin-bottom:.5rem">Partager avec l'élève</h3>
+    <p id="qr-nom-eleve" style="font-size:13px;color:var(--muted);margin-bottom:1.25rem"></p>
+    <div id="qr-canvas" style="display:flex;justify-content:center;margin-bottom:1.25rem"></div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:.75rem">Scanner ce QR code ou copier le lien ci-dessous</p>
+    <div style="display:flex;gap:8px;margin-bottom:1.25rem">
+      <input id="qr-url" type="text" readonly style="flex:1;font-size:11px;background:var(--cream);color:var(--ink);border:1.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;cursor:text" />
+      <button class="btn-sm" onclick="copierLienQR()" id="btn-copier-qr">Copier</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary btn-sm" onclick="imprimerQR()">Imprimer QR</button>
+      <button class="btn-cancel" onclick="closeModal('modal-qr')">Fermer</button>
+    </div>
+    <p style="margin-top:1rem;font-size:10px;color:var(--muted);line-height:1.5">Le lien contient toutes les données de correction — aucun serveur, aucune donnée transmise.</p>
+  </div>
+</div>
+
+<!-- PANNEAU CONSEILS PERSONNALISÉS -->
+<div class="panneau-conseils" id="panneau-conseils">
+  <div class="panneau-inner">
+    <div class="panneau-header">
+      <div class="panneau-titre" id="panneau-conseils-titre">Conseils personnalisés</div>
+      <button class="panneau-close" onclick="document.getElementById('panneau-conseils').classList.remove('open')">✕</button>
+    </div>
+    <p style="font-size:11px;color:var(--tm);margin-bottom:1rem;line-height:1.5">Les conseils correspondant au niveau constaté sont <b>pré-cochés</b>. Décoche ceux qui ne s'appliquent pas à cette copie, et ajoute ceux d'autres niveaux si besoin. Seuls les conseils cochés apparaîtront dans le PDF élève.</p>
+    <div id="panneau-conseils-body"></div>
+    <div style="position:sticky;bottom:0;background:var(--s);padding-top:1rem;margin-top:1rem;border-top:.5px solid var(--b);display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-cancel" onclick="document.getElementById('panneau-conseils').classList.remove('open')">Annuler</button>
+      <button class="btn-sm btn-primary" onclick="sauvegarderConseils()">✓ Enregistrer ces conseils</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LEVELS=['A1','A2','B1','B2','C1','C2'];
+const LI={A1:0,A2:1,B1:2,B2:3,C1:4,C2:5};
+const LC={
+  A1:{bg:'#fce8e8',t:'#9b1c1c',bd:'#f5b3b3',bar:'#e57373'},
+  A2:{bg:'#fff3e0',t:'#7c4700',bd:'#ffc87a',bar:'#ff9800'},
+  B1:{bg:'#fffde7',t:'#5a4800',bd:'#ffe57a',bar:'#fdd835'},
+  B2:{bg:'#e3f0ff',t:'#003a85',bd:'#90bcff',bar:'#4f91ff'},
+  C1:{bg:'#e6f4ea',t:'#1a5c2e',bd:'#7ecfa0',bar:'#43a047'},
+  C2:{bg:'#f3e8ff',t:'#5b1a8a',bd:'#c897f5',bar:'#9c27b0'},
+};
+const LC_DEFAULT={bg:'#f0f2f5',t:'#595c5d',bd:'#e0e3e4',bar:'#aaa'};
+function lc(l){return LC[l]||LC_DEFAULT;}
+const PCOL={
+  ecrite:{bg:'#e3f0ff',t:'#003a85',bd:'#90bcff',label:'Expression écrite'},
+  orale:{bg:'#e6f4ea',t:'#1a5c2e',bd:'#7ecfa0',label:'Expression orale'},
+  traduction:{bg:'#fff3e0',t:'#7c4700',bd:'#ffc87a',label:'Traduction (Version)'},
+  transposition:{bg:'#f3e8ff',t:'#5b1a8a',bd:'#c897f5',label:'Transposition'},
+};
+const SKL={CO:'Compréhension oral',PO:'Production orale',CE:'Compréhension écrit',PE:'Production écrite'};
+const CONSEILS={
+  A1:['Mémoriser le vocabulaire de base avec des flashcards (Anki, Quizlet)','S\'entraîner à construire des phrases simples à l\'écrit et à l\'oral','Écouter de courts enregistrements avec transcription'],
+  A2:['Travailler les structures grammaticales essentielles','Lire de courts textes adaptés à son niveau','Pratiquer la reformulation en anglais'],
+  B1:['Utiliser davantage de connecteurs logiques à l\'écrit','Diversifier le vocabulaire thématique LLCER-AMC','Écouter BBC Learning English et prendre des notes'],
+  B2:['Approfondir les procédés de traduction (Vinay-Darbelnet)','Travailler la nuance lexicale et les collocations','S\'entraîner à la synthèse de documents complexes'],
+  C1:['Affiner la maîtrise des registres de langue','Analyser l\'implicite culturel dans les documents','Préparer l\'oral en conditions réelles (enregistrements minutés)'],
+  C2:['Lire la presse anglophone spécialisée (The Economist, Atlantic)','Travailler la rhétorique et l\'argumentation avancée','Viser la précision stylistique maximale dans chaque production'],
+};
+// TABLE DE CONVERSION OFFICIELLE MEN (grille LLCER terminale, tableau page 2)
+// Total points score → plage de notes /20
+// Points score par niveau (4 critères) : A1=3, A2=5, B1=10, B2=20, C1=30, C2=35
+// Ex : 4×B1 = 40 pts → plage 11-13/20
+const CONV_TABLE_20=[
+  {min:0,  max:4,  noteMin:0,  noteMax:0,  label:'0'},
+  {min:5,  max:19, noteMin:1,  noteMax:4,  label:'A1/A2'},
+  {min:20, max:29, noteMin:5,  noteMax:7,  label:'A2/A2+'},
+  {min:30, max:39, noteMin:8,  noteMax:10, label:'A2+/B1'},
+  {min:40, max:59, noteMin:11, noteMax:13, label:'B1/B1+'},
+  {min:60, max:79, noteMin:14, noteMax:16, label:'B1+/B2'},
+  {min:80, max:99, noteMin:17, noteMax:19, label:'B2/B2+'},
+  {min:100,max:999,noteMin:20, noteMax:20, label:'B2+/C1/C2'},
+];
+
+// Trad/Transpo : niveau → scores /10 possibles (grille MEN pages 3-4)
+// Note /4 = score × 4 ÷ 10
+const TRAD_NIVEAUX={
+  C2:{scores:[10]},
+  C1:{scores:[9,10]},
+  B2:{scores:[7,8]},
+  B1:{scores:[5,6]},
+  A2:{scores:[3,4]},
+  A1:{scores:[1,2]},
+};
+function score10toNote4(s){return Math.round(s*4/10*10)/10;}
+
+// Conversion note /20 → /16 si combo : note20 × 4 ÷ 5
+function sur20versur16(note20){return Math.round(note20*4/5*10)/10;}
+
+function getConvRange(total,table){
+  const row=table.find(r=>total>=r.min&&total<=r.max);
+  return row?{noteMin:row.noteMin,noteMax:row.noteMax}:null;
+}
+function noteOptions(range){
+  if(!range)return[];
+  // plage large (>2 pts d'écart) → pas de 1, sinon pas de 0.5
+  const step=(range.noteMax-range.noteMin)>=2?1:0.5;
+  const opts=[];
+  for(let n=range.noteMin;n<=range.noteMax+0.001;n+=step)opts.push(Math.round(n*2)/2);
+  return[...new Set(opts)];
+}
+
+const G={
+  ecrite:{label:'Expression écrite',isTrad:false,
+    criteres:[
+      {id:'cont',name:'Qualité du contenu',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:3},
+       desc:{
+         C2:'Peut traiter le sujet et rendre de fines nuances de sens en prenant en compte la complexité du sujet et en éclairant de manière pertinente les enjeux (inter)culturels du dossier.',
+         C1:'Peut traiter le sujet et produire un écrit pertinent qui prend appui sur une compréhension fine du dossier, notamment dans ses enjeux (inter)culturels.',
+         B2:'Peut traiter le sujet et produire un écrit globalement pertinent, qui prend appui sur une compréhension satisfaisante du dossier, notamment dans ses enjeux (inter)culturels.',
+         B1:'Peut, dans l\'ensemble, traiter le sujet et produire un écrit relativement pertinent, qui prend appui sur la compréhension des principaux enjeux (inter)culturels du dossier.',
+         A2:'Peut traiter quelques aspects du sujet, même si la production est superficielle.',
+         A1:'Peut simplement amorcer une production écrite en lien avec le sujet.',
+       }},
+      {id:'coh',name:'Cohérence du discours',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:3},
+       desc:{
+         C2:'Peut produire un écrit finement structuré et nuancé qui met en évidence la cohérence interne du dossier.',
+         C1:'Peut produire un écrit nuancé et clairement structuré qui met globalement en évidence la cohérence interne du dossier, grâce à des outils linguistiques appropriés.',
+         B2:'Peut produire un écrit structuré mettant en évidence les principaux réseaux de sens entre les différents documents.',
+         B1:'Peut produire un écrit structuré dans l\'ensemble mettant en évidence les idées principales du dossier.',
+         A2:'Peut exposer quelques idées du dossier en utilisant des connecteurs élémentaires.',
+         A1:'Peut énumérer quelques informations contenues dans le dossier.',
+       }},
+      {id:'corr',name:'Correction linguistique',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:3},
+       desc:{
+         C2:'Peut rédiger avec un très haut degré de correction grammaticale, y compris en mobilisant des structures complexes et sur un sujet complexe.',
+         C1:'Peut maintenir tout au long de sa rédaction un haut degré de correction grammaticale, y compris en mobilisant des structures complexes.',
+         B2:'Peut démontrer une bonne maîtrise des structures simples et courantes. Les erreurs sur les structures complexes ne donnent pas lieu à des malentendus.',
+         B1:'Peut démontrer une bonne maîtrise des structures simples et courantes. Les erreurs sur les structures simples ne gênent pas la lecture.',
+         A2:'Peut produire un texte immédiatement compréhensible malgré des erreurs fréquentes.',
+         A1:'Peut produire un texte globalement compréhensible, mais dont la lecture est peu aisée.',
+       }},
+      {id:'rich',name:'Richesse de la langue',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:3},
+       desc:{
+         C2:'Peut employer de manière pertinente un très vaste répertoire lexical incluant des expressions idiomatiques, des nuances de formulation et des structures variées, même sur un sujet complexe.',
+         C1:'Peut employer de manière pertinente un vaste répertoire lexical incluant des expressions idiomatiques, des nuances de formulation et des structures variées.',
+         B2:'Peut produire un texte dont l\'étendue du lexique et des structures est suffisante pour permettre précision et variété des formulations.',
+         B1:'Peut produire un texte dont l\'étendue lexicale relative nécessite l\'usage de périphrases et de répétitions.',
+         A2:'Peut produire un texte dont les mots sont adaptés à l\'intention de communication, en dépit d\'un répertoire lexical limité.',
+         A1:'Peut produire un texte intelligible malgré un lexique pauvre.',
+       }},
+    ],
+    totalMax:140,convTable:CONV_TABLE_20,noteMax:20,
+    formula:'Total pts → tableau MEN → plage /20 → à choisir',
+  },
+  orale:{label:'Expression orale',isTrad:false,
+    criteres:[
+      {id:'cont',name:'Expression en continu',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:1},
+       desc:{
+         C2:'Peut développer une argumentation nuancée et exprimer une pensée subtile en rapport avec un sujet complexe.',
+         C1:'Peut développer une argumentation solide, fondée sur des aspects (inter)culturels, de manière synthétique et fluide tout en s\'assurant de sa bonne réception.',
+         B2:'Peut développer une argumentation pertinente et assez étayée, y compris par des reformulations qui ne rompent pas le fil du discours.',
+         B1:'Peut exposer un point de vue de manière simple en l\'illustrant par des exemples et des références à des aspects (inter)culturels.',
+         A2:'Peut exprimer un avis en termes simples. Le discours est bref et les éléments en sont juxtaposés.',
+         A1:'Peut exprimer un avis en termes très simples. Les énoncés sont ponctués de pauses, d\'hésitations et de faux démarrages.',
+       }},
+      {id:'inter',name:'Interaction orale',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:1},
+       desc:{
+         C2:'Peut interagir avec aisance et spontanéité et contribuer habilement à la construction de l\'échange, y compris en exploitant des références (inter)culturelles et sur un sujet complexe.',
+         C1:'Peut interagir avec aisance et contribuer habilement à la construction de l\'échange, y compris en exploitant des références (inter)culturelles.',
+         B2:'Peut argumenter et chercher à convaincre. Peut réagir avec pertinence et relancer la discussion, y compris pour amener l\'échange sur un terrain familier.',
+         B1:'Peut engager, soutenir et clore une conversation simple sur des sujets familiers. Peut faire référence à des aspects (inter)culturels.',
+         A2:'Peut répondre et réagir de manière simple.',
+         A1:'Peut intervenir simplement mais la communication repose sur la répétition et la reformulation.',
+       }},
+      {id:'corr',name:'Correction linguistique',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:1},
+       desc:{
+         C2:'Peut utiliser avec une bonne maîtrise tout l\'éventail des traits phonologiques de la langue cible, de façon à être toujours intelligible, même sur un sujet complexe.',
+         C1:'Peut utiliser avec une assez bonne maîtrise tout l\'éventail des traits phonologiques de la langue cible, de façon à être toujours intelligible.',
+         B2:'L\'accent peut subir l\'influence d\'autres langues mais n\'entrave pas l\'intelligibilité. Les erreurs de langue ne donnent pas lieu à malentendu.',
+         B1:'Peut s\'exprimer de manière intelligible malgré l\'influence d\'autres langues. Bonne maîtrise des structures simples.',
+         A2:'Peut s\'exprimer de manière suffisamment claire pour être compris mais la compréhension requiert un effort des interlocuteurs.',
+         A1:'Peut utiliser un répertoire très limité d\'expressions et de mots mémorisés, de façon compréhensible.',
+       }},
+      {id:'rich',name:'Richesse de la langue',scores:{C2:35,C1:30,B2:20,B1:10,A2:5,A1:1},
+       desc:{
+         C2:'Peut employer de manière pertinente un vaste répertoire lexical incluant des expressions idiomatiques, des nuances de formulation et des structures variées même sur un sujet complexe.',
+         C1:'Peut employer de manière pertinente un vaste répertoire lexical incluant des expressions idiomatiques, des nuances de formulation et des structures variées.',
+         B2:'Peut produire un discours et des énoncés assez fluides dont l\'étendue du lexique est suffisante pour permettre précision et variété des formulations.',
+         B1:'Peut produire un discours et des énoncés dont l\'étendue lexicale relative nécessite l\'usage de périphrases et répétitions.',
+         A2:'Peut produire un discours et des énoncés dont les mots sont adaptés à l\'intention de communication, en dépit d\'un répertoire lexical limité.',
+         A1:'Peut produire des énoncés intelligibles malgré un lexique pauvre.',
+       }},
+    ],
+    totalMax:140,convTable:CONV_TABLE_20,noteMax:20,
+    formula:'Total pts → tableau MEN → plage /20 → à choisir',
+  },
+  traduction:{label:'Traduction (Version)',isTrad:true,
+    critereId:'trad',totalMax:10,noteMax:4,
+    formula:'Niveau constaté → score /10 → × 4 ÷ 10 = note /4',
+    desc:{
+      C2:'Peut traduire de manière précise et fine, en rendant habilement, s\'il y a lieu, les spécificités stylistiques du texte.',
+      C1:'Peut traduire de manière fidèle, même si une influence du document original se fait sentir.',
+      B2:'Peut traduire de manière claire, mais la traduction est encore trop calquée sur le texte original.',
+      B1:'Peut traduire de façon approximative. La traduction reste compréhensible malgré quelques imprécisions.',
+      A2:'Peut utiliser une langue simple pour faire une traduction approximative. La traduction reste compréhensible malgré des erreurs.',
+      A1:'Peut traduire des mots et des expressions simples.',
+    },
+  },
+  transposition:{label:'Transposition',isTrad:true,
+    critereId:'trans',totalMax:10,noteMax:4,
+    formula:'Niveau constaté → score /10 → × 4 ÷ 10 = note /4',
+    desc:{
+      C2:'Peut transposer avec précision et finesse le contenu du texte (informations, arguments, points de vue, nuances) et attirer l\'attention sur l\'implicite ou le ton.',
+      C1:'Peut transposer, dans une langue appropriée, le contenu du texte en rendant compte de sa complexité et de ses nuances.',
+      B2:'Peut transposer, dans une langue appropriée, l\'essentiel du contenu du texte, et rendre compte des informations, des arguments ou des points de vue exprimés.',
+      B1:'Peut transposer, dans une langue globalement appropriée, les points essentiels du texte à l\'aide d\'un vocabulaire assez précis.',
+      A2:'Peut extraire les informations importantes du texte et les exprimer dans une langue simple, à l\'aide d\'un vocabulaire usuel.',
+      A1:'Peut extraire quelques informations et les exprimer dans une langue simple. La transposition n\'est que partiellement compréhensible ou juste.',
+    },
+  },
+};
+const COMBOS={
+  'ecrite+traduction':    {label:'Synthèse + Traduction',    detail:'Note /20 × 16/20 = /16  +  Traduction /4  =  /20'},
+  'ecrite+transposition': {label:'Synthèse + Transposition', detail:'Note /20 × 16/20 = /16  +  Transposition /4  =  /20'},
+  'orale+traduction':     {label:'Oral + Traduction',        detail:'Note /20 × 16/20 = /16  +  Traduction /4  =  /20'},
+  'orale+transposition':  {label:'Oral + Transposition',     detail:'Note /20 × 16/20 = /16  +  Transposition /4  =  /20'},
+};
+
+function chip(l){if(!l)return`<span class="chip" style="background:var(--sl);color:var(--tm);border-color:var(--b)">—</span>`;return`<span class="chip chip-${l.toLowerCase()}">${l}</span>`;}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function avCol(id){const c=[{bg:'#dce8ff',t:'#002a60'},{bg:'#d6fae8',t:'#004d2e'},{bg:'#fff3c4',t:'#3d2b00'},{bg:'#fbeaf0',t:'#4b1528'},{bg:'#e1f5ee',t:'#04342c'}];return c[id%c.length];}
+function avgLevel(sk){
+  const v=Object.values(sk).filter(l=>l!=null).map(l=>LI[l]||0);
+  if(!v.length)return null;
+  return LEVELS[Math.round(v.reduce((a,b)=>a+b,0)/v.length)];
+}
+function lvlPct(l){return[14,28,44,62,80,100][LI[l]||0];}
+function comboKey(types){return[...types].sort().join('+');}
+// Accords selon le genre : genre='F' → féminin, 'M' → masculin
+function e(genre){return genre==='F'?'e':'';}
+function accord(mot,genre){
+  // Quelques mots courants à accorder
+  const acc={précis:{F:'précise',M:'précis'},attentif:{F:'attentive',M:'attentif'},rigoureux:{F:'rigoureuse',M:'rigoureux'},
+    minutieux:{F:'minutieuse',M:'minutieux'},synthétique:{F:'synthétique',M:'synthétique'},
+    efficace:{F:'efficace',M:'efficace'},pertinent:{F:'pertinente',M:'pertinent'}};
+  return(acc[mot]&&acc[mot][genre])||mot;
+}
+
+let students=[
+  {id:1,name:'Elena Richardson',genre:'F',classeId:1,skills:{CO:'C2',PO:'C1',CE:'B2',PE:'B2'},trend:[.4,.5,.45,.7,.85,.95],productions:[]},
+  {id:2,name:'Lucas Bennett',genre:'M',classeId:1,skills:{CO:'B2',PO:'A2',CE:'B1',PE:'A2'},trend:[.3,.35,.32,.45,.42,.5],productions:[]},
+  {id:3,name:'Mei Chen',genre:'F',classeId:1,skills:{CO:'A2',PO:'A1',CE:'B1',PE:'A2'},trend:[.15,.18,.22,.28,.35,.45],productions:[]},
+];
+let devoirs=[
+  {id:1,titre:'Bac Blanc n°1',types:['ecrite','traduction'],date:'2026-02-14'},
+  {id:2,titre:'Oral simulation',types:['orale'],date:'2026-03-05'},
+  {id:3,titre:'Bac Blanc n°2',types:['ecrite','transposition'],date:'2026-03-20'},
+];
+let nextSId=4,nextDId=4,selectedEpreuves=[];
+let classes=[{id:1,nom:'Terminale LLCER AMC'}];
+let nextClId=2;
+let currentEleveId=null,currentProdType=null;
+let corrCtx=null,corrState={};
+
+function showPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  ['eleves','classe','devoirs'].forEach((x,i)=>{if(x===n)document.querySelectorAll('.nav-tab')[i].classList.add('active');});
+  if(n==='eleves')renderAll();
+  if(n==='classe')renderClasse();
+  if(n==='devoirs')renderDevoirs();
+}
+
+function renderStats(){
+  if(!students.length){document.getElementById('stats-row').innerHTML='';return;}
+  const all=students.map(s=>avgLevel(s.skills)).filter(l=>l!=null);
+  const aIdx=all.map(l=>LI[l]||0);
+  const avg=LEVELS[Math.round(aIdx.reduce((a,b)=>a+b,0)/aIdx.length)];
+  const c=all.filter(l=>l==='C1'||l==='C2').length;
+  const tp=students.reduce((a,s)=>a+s.productions.length,0);
+  const cl=lc(avg);
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Niveau moyen classe</div><div class="stat-value" style="color:${cl.t}">${avg}</div><div class="stat-sub">${students.length} élève${students.length>1?'s':''}</div></div>
+    <div class="stat-card"><div class="stat-label">Maîtrise C1/C2</div><div class="stat-value" style="color:#1a5c2e">${c}</div><div class="stat-sub">élève${c>1?'s':''}</div></div>
+    <div class="stat-card"><div class="stat-label">Productions corrigées</div><div class="stat-value">${tp}</div><div class="stat-sub">${devoirs.length} devoir${devoirs.length>1?'s':''}</div></div>`;
+}
+
+function renderList(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  const fl=document.getElementById('filter-level').value;
+  const fc=document.getElementById('filter-classe')?.value||'';
+  let list=students.filter(s=>{const avg=avgLevel(s.skills);return(!q||s.name.toLowerCase().includes(q))&&(!fl||avg===fl)&&(!fc||String(s.classeId)===fc);}).sort((a,b)=>a.name.localeCompare(b.name,'fr'));
+  const con=document.getElementById('student-list');
+  if(!list.length){con.innerHTML='<div class="empty-state">Aucun·e élève trouvé·e.</div>';return;}
+  con.innerHTML=list.map(s=>{
+    const avg=avgLevel(s.skills);const cl2=lc(avg);const av=avCol(s.id);
+    return`<div class="s-card" onclick="openFiche(${s.id})">
+      <div class="s-header">
+        <div class="avatar" style="background:${av.bg};color:${av.t};width:38px;height:38px;font-size:13px">${initials(s.name)}</div>
+        <div><div class="s-name">${s.name}</div><div class="s-meta">${(()=>{const cl=classes.find(c=>c.id===s.classeId);return cl?cl.nom+' · ':''})()}${s.productions.length} prod. corrigée${s.productions.length>1?'s':''}</div></div>
+        <div class="s-right">${chip(avg)}<span style="font-size:13px;color:#aaa">›</span></div>
+      </div></div>`;}).join('');
+}
+
+function openFiche(id){currentEleveId=id;currentProdType=null;showPage('fiche');renderFiche();document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));}
+
+function renderFiche(){
+  const s=students.find(x=>x.id===currentEleveId);if(!s)return;
+  const avg=avgLevel(s.skills);const av=avCol(s.id);const cc=lc(avg);
+  const skillsHtml=Object.entries(SKL).map(([k,label])=>{
+    const l=s.skills[k];const c=lc(l);
+    const btns=LEVELS.map(lv=>{const ac=LC[lv];return`<button class="lvl-btn" style="${l===lv?'background:'+ac.bg+';color:'+ac.t+';border-color:'+ac.bd+';font-weight:700':''}" onclick="setSkill(event,${s.id},'${k}','${lv}')">${lv}</button>`;}).join('');
+    return`<div><div class="skill-header"><span class="skill-name">${label}</span>${chip(l)}</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:${l?lvlPct(l):0}%;background:${c.bar}"></div></div>
+      <div class="skill-edit">${btns}</div></div>`;}).join('');
+
+  const conseilsHtml=(CONSEILS[avg]||[]).map(c=>`<div class="conseil-item" style="color:${cc.t}"><span style="flex-shrink:0">→</span><span>${c}</span></div>`).join('');
+  const allTypes=[...new Set(devoirs.flatMap(d=>d.types))];
+  const prodTabsHtml=`<button class="prod-tab${!currentProdType?' active':''}" onclick="setProdType(null)">Tout (${s.productions.length})</button>`+
+    allTypes.map(t=>{const pc=PCOL[t];const cnt=s.productions.filter(p=>{const d=devoirs.find(x=>x.id===p.devoirId);return d&&d.types.includes(t);}).length;
+      return`<button class="prod-tab${currentProdType===t?' active':''}" style="${currentProdType===t?'background:'+pc.bg+';color:'+pc.t+';border-color:'+pc.bd+';border:1px solid':''}" onclick="setProdType('${t}')">${pc.label.split(' ')[1]||pc.label} (${cnt})</button>`;}).join('');
+
+  const fp=currentProdType?s.productions.filter(p=>{const d=devoirs.find(x=>x.id===p.devoirId);return d&&d.types.includes(currentProdType);}):s.productions;
+  const prodsHtml=fp.length?fp.map(p=>{
+    const d=devoirs.find(x=>x.id===p.devoirId);if(!d)return'';
+    const dateStr=d.date?new Date(d.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):'';
+    const eprTags=d.types.map(t=>{const pc=PCOL[t];return`<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:8px;background:${pc.bg};color:${pc.t};border:1px solid ${pc.bd}">${pc.label}</span>`;}).join(' ');
+    const notes={};let rowsHtml='';
+    d.types.forEach(type=>{
+      const g=G[type];const pc=PCOL[type];
+      const isCombo=d.types.length===2;
+      let critRows='', scoreLine='';
+      const noteChoisie=p.criteres?.[type+'_note'];
+      const isMain=!g.isTrad;
+      if(g.isTrad){
+        // Trad/transpo : récupérer le niveau et le score
+        const tradLevel=p.criteres?.[`${type}_level`];
+        const score10=p.criteres?.[`${type}_score10`];
+        if(tradLevel){
+          const cl=LC[tradLevel];const info=TRAD_NIVEAUX[tradLevel];
+          critRows=`<div class="grille-result-row">
+            <span class="grille-crit-name">Niveau constaté</span>
+            <div class="grille-crit-bar"><div class="grille-crit-fill" style="width:${Math.round((info.scores[info.scores.length-1])/10*100)}%;background:${cl.bar}"></div></div>
+            ${chip(tradLevel)}<span style="font-size:10px;color:var(--tm)">${score10||info.scores[0]}/10</span></div>`;
+          scoreLine=`Score <b>${score10||info.scores[0]}/10</b> × 4 ÷ 10 = <b style="color:#7c4700">${score10toNote4(score10||info.scores[0])}/4</b>`;
+        }
+      } else {
+        // Écrit/oral : 4 critères
+        critRows=g.criteres.map(c=>{
+          const lv=p.criteres?.[type+'_'+c.id];if(!lv)return'';
+          const cl=LC[lv];const sc=c.scores[lv]||0;const maxSc=c.scores['C2']||35;
+          return`<div class="grille-result-row">
+            <span class="grille-crit-name">${c.name}</span>
+            <div class="grille-crit-bar"><div class="grille-crit-fill" style="width:${Math.round(sc/maxSc*100)}%;background:${cl.bar}"></div></div>
+            ${chip(lv)}<span style="font-size:10px;color:var(--tm)">${sc}pts</span></div>`;}).join('');
+        const total=g.criteres.reduce((a,c)=>a+(c.scores[p.criteres?.[type+'_'+c.id]]||0),0);
+        const row=total>0?CONV_TABLE_20.find(r=>total>=r.min&&total<=r.max):null;
+        if(total>0)scoreLine=`Total <b>${total}</b> pts${row?` → <b style="color:#0058b9">${row.noteMin} à ${row.noteMax}/20</b> <span style="font-size:10px;color:var(--tm)">(${row.label})</span>`:''}`;
+      }
+      if(critRows)rowsHtml+=`<div style="margin-bottom:10px">
+        <div style="font-size:11px;font-weight:600;color:${pc.t};margin-bottom:5px">${pc.label}</div>
+        ${critRows}
+        ${scoreLine?`<div style="margin-top:6px;font-size:12px;color:var(--tm)">${scoreLine}</div>`:''}
+        ${noteChoisie!=null?`<div style="margin-top:4px">
+          <span class="note-box">${noteChoisie}/${g.noteMax}</span>
+        ${isMain&&isCombo?`<span style="font-size:11px;color:var(--tm);margin-left:6px">× 4 ÷ 5 = ${Math.round(noteChoisie*4/5*100)/100}/16</span>`:''}
+        </div>`:''}
+      </div>`;
+    });
+    let finalHtml='';
+    if(p.noteFinaleSur20!=null){
+      const noteMax=d.types.length===2?20:G[d.types[0]].noteMax;
+      finalHtml=`<div class="note-display"><span class="note-box-total">Note finale : ${p.noteFinaleSur20}/${noteMax}</span></div>`;
+    }
+    return`<div class="prod-card">
+      <div class="prod-card-header"><div><div class="prod-title">${d.titre}</div><div class="prod-date">${dateStr}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">${eprTags}<button class="btn-sm" style="font-size:11px;padding:3px 10px" onclick="ouvrirPanneauConseils(${s.id},${d.id})">✎ Conseils</button><button class="btn-sm" style="font-size:11px;padding:3px 10px" onclick="printDevoir(${s.id},${d.id})">↓ PDF</button><button class="btn-sm" style="font-size:11px;padding:3px 10px;background:#fffbf2;border-color:#f6e05e;color:#744210" onclick="ouvrirQR(${s.id},${d.id})">⬡ QR & Lien</button></div></div>
+      ${rowsHtml}${finalHtml}
+      ${p.commentaire?`<div style="font-size:11px;color:var(--tm);margin-top:8px;font-style:italic;line-height:1.5">${p.commentaire}</div>`:''}
+    </div>`;}).join(''):`<div class="empty-state">Aucune production pour ce filtre.</div>`;
+
+  const dispo=devoirs.filter(d=>!s.productions.find(p=>p.devoirId===d.id));
+  const addHtml=dispo.length?`<div style="margin-top:1rem"><div style="font-size:11px;color:var(--tm);margin-bottom:7px;font-weight:500">Corriger un devoir :</div><div style="display:flex;gap:6px;flex-wrap:wrap">${dispo.map(d=>{const tags=d.types.map(t=>PCOL[t].label).join(' + ');return`<button class="btn-sm" onclick="openCorrection(${s.id},${d.id})">${d.titre} <span style="color:var(--tm);font-size:10px">(${tags})</span></button>`;}).join('')}</div></div>`:'';
+
+  document.getElementById('fiche-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.25rem;flex-wrap:wrap;padding-bottom:1.25rem;border-bottom:1px solid var(--b)">
+      <div class="avatar" style="background:${av.bg};color:${av.t};width:52px;height:52px;font-size:17px">${initials(s.name)}</div>
+      <div><div style="font-size:18px;font-weight:600;color:var(--t)">${s.name}</div><div style="font-size:12px;color:var(--tm);margin-top:2px">${s.productions.length} production${s.productions.length>1?'s':''} corrigée${s.productions.length>1?'s':''}</div></div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">${chip(avg)}<button class="btn-sm" onclick="printFiche(${s.id})" title="Générer le bilan élève en PDF">↓ Bilan PDF</button></div>
+    </div>
+
+    <div class="section-title">Commentaire audio</div>
+    <div id="audio-recorder-${s.id}" class="audio-recorder-block">
+      <div class="audio-controls">
+        <button class="audio-btn audio-btn-rec" id="btn-rec-${s.id}" onclick="audioStartRec(${s.id})" title="Démarrer l'enregistrement">
+          <span class="rec-dot"></span> Enregistrer
+        </button>
+        <button class="audio-btn audio-btn-pause" id="btn-pause-${s.id}" onclick="audioPause(${s.id})" title="Pause" disabled>
+          ⏸ Pause
+        </button>
+        <button class="audio-btn audio-btn-stop" id="btn-stop-${s.id}" onclick="audioStop(${s.id})" title="Arrêter" disabled>
+          ⏹ Arrêter
+        </button>
+        <div class="audio-timer" id="audio-timer-${s.id}">0:00</div>
+      </div>
+      <div class="audio-wave" id="audio-wave-${s.id}">
+        ${Array.from({length:32},()=>'<span class="wave-bar"></span>').join('')}
+      </div>
+      <div id="audio-player-${s.id}" style="display:none;margin-top:10px">
+        <audio id="audio-el-${s.id}" controls style="width:100%;height:36px"></audio>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="audio-btn" style="background:#e6f4ea;color:#1a5c2e;border-color:#7ecfa0" onclick="audioDownload(${s.id},'${s.name.replace(/'/g,"\\'")}')">↓ Télécharger l'audio</button>
+          <button class="audio-btn" style="background:var(--sl);color:var(--tm)" onclick="audioReset(${s.id})">✕ Recommencer</button>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--b)">
+        <div style="font-size:11px;color:var(--tm);margin-bottom:6px">ou importer un fichier audio existant (enregistrement depuis téléphone, Voice Memo…)</div>
+        <label class="audio-btn" style="cursor:pointer;display:inline-flex">
+          ↑ Importer un fichier audio
+          <input type="file" accept="audio/*" style="display:none" onchange="audioImport(event,${s.id},'${s.name.replace(/'/g,"\\'")}')">
+        </label>
+      </div>
+      <div id="audio-status-${s.id}" class="audio-status"></div>
+    </div>
+
+    <div class="section-title" style="margin-top:1.25rem">Compétences CECRL</div>
+    <div class="skills-grid">${skillsHtml}</div>
+    <div class="conseils-section" style="background:${cc.bg};border-color:${cc.bd};margin-top:1.25rem">
+      <div style="font-size:12px;font-weight:600;color:${cc.t};margin-bottom:7px">Conseils de progression — niveau ${avg}</div>${conseilsHtml}
+    </div>
+    <div class="section-title" style="margin-top:1.5rem">Productions</div>
+    <div class="prod-tabs">${prodTabsHtml}</div>
+    <div class="prod-list">${prodsHtml}</div>
+    ${addHtml}`;
+}
+
+function setProdType(t){currentProdType=t;renderFiche();}
+function setSkill(e,id,skill,level){e.stopPropagation();const s=students.find(x=>x.id===id);if(!s)return;s.skills[skill]=level;s.trend=[...s.trend.slice(1),LI[avgLevel(s.skills)]/5];renderFiche();saveData();showToast(`${skill} → ${level}`);}
+
+function openCorrection(eleveId,devoirId){
+  const d=devoirs.find(x=>x.id===devoirId);if(!d)return;
+  corrCtx={eleveId,devoirId};corrState={};
+  const isCombo=d.types.length===2;
+  document.getElementById('corr-modal-title').textContent='Correction — '+d.titre;
+  document.getElementById('corr-commentaire').value='';
+  document.getElementById('corr-modal-body').innerHTML=d.types.map(type=>{
+    const g=G[type];const pc=PCOL[type];
+    const comboHint=(!g.isTrad)&&isCombo
+      ?`<span style="font-size:10px;color:#7c4700;margin-left:6px">(note /20 → convertie en /16 pour le total)</span>`:'';
+    if(g.isTrad){
+      const levelBtns=LEVELS.map(lv=>{
+        const info=TRAD_NIVEAUX[lv];
+        const scoresStr=info.scores.join(' ou ')+' /10';
+        const notesStr=info.scores.map(s=>score10toNote4(s)).join(' ou ')+' /4';
+        const descTxt=(g.desc&&g.desc[lv])||'';
+        return`<div class="tip-wrap" style="display:block">
+          <button class="corr-lvl-btn" id="cb-${type}-lv-${lv}" onclick="setTradLevel('${type}','${lv}')" style="width:100%;text-align:left">
+            ${chip(lv)} <span class="pts">${scoresStr} → ${notesStr}</span>
+          </button>
+          ${descTxt?`<div class="tip">${descTxt}</div>`:''}
+        </div>`;}).join('');
+      return`<div class="epreuve-block">
+        <div class="epreuve-title">
+          <span class="epreuve-tag" style="background:${pc.bg};color:${pc.t};border-color:${pc.bd}">${pc.label}</span>
+          <span style="font-size:11px;color:var(--tm)">${g.formula}</span>
+        </div>
+        <div style="font-size:12px;font-weight:500;color:var(--t);margin-bottom:8px">Niveau constaté <span style="font-size:10px;color:var(--tm);font-weight:400">(survoler pour le descripteur officiel MEN)</span> :</div>
+        <div style="display:flex;flex-direction:column;gap:6px">${levelBtns}</div>
+        <div id="score-${type}" style="margin-top:10px;display:none">
+          <div style="padding:10px 14px;background:var(--sl);border-radius:8px;border:1px solid var(--b)">
+            <div style="font-size:11px;color:var(--tm);margin-bottom:6px">Score sélectionné :</div>
+            <div id="score-btns-${type}" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+            <div id="note4-display-${type}" style="margin-top:8px;font-size:13px;font-weight:600;color:#7c4700"></div>
+          </div>
+        </div>
+        <div id="desc-display-${type}" style="display:none;margin-top:8px;font-size:11px;color:var(--tm);background:var(--sl);padding:8px 12px;border-radius:6px;border-left:3px solid var(--b);line-height:1.6"></div>
+        <div id="conseils-cibles-${type}-${G[type].critereId||type}" style="display:none;margin-top:8px;padding:8px 10px;background:var(--sl);border-radius:6px;border-left:3px solid var(--b)"></div>
+      </div>`;
+    } else {
+      return`<div class="epreuve-block">
+        <div class="epreuve-title">
+          <span class="epreuve-tag" style="background:${pc.bg};color:${pc.t};border-color:${pc.bd}">${pc.label}</span>
+          <span style="font-size:11px;color:var(--tm)">${g.formula}</span>${comboHint}
+        </div>
+        <div style="font-size:10px;color:var(--tm);margin-bottom:8px">Survoler un niveau pour voir le descripteur officiel MEN — cliquer pour sélectionner et ajouter au bilan élève.</div>
+        ${g.criteres.map(c=>`<div class="corr-crit-row">
+          <div class="corr-crit-name">${c.name}</div>
+          <div class="corr-crit-levels">${LEVELS.map(lv=>{
+            const descTxt=(c.desc&&c.desc[lv])||'';
+            return`<div class="tip-wrap">
+              <button class="corr-lvl-btn" id="cb-${type}-${c.id}-${lv}" onclick="setCorrLevel('${type}','${c.id}','${lv}')">${lv}<span class="pts"> ${c.scores[lv]}pts</span></button>
+              ${descTxt?`<div class="tip">${descTxt}</div>`:''}
+            </div>`;}).join('')}
+          </div>
+          <div id="desc-${type}-${c.id}" style="display:none;margin-top:5px;font-size:11px;color:var(--tm);background:var(--sl);padding:6px 10px;border-radius:5px;border-left:3px solid var(--b);line-height:1.5"></div>
+          <div id="conseils-cibles-${type}-${c.id}" style="display:none;margin-top:6px;padding:8px 10px;background:var(--sl);border-radius:6px;border-left:3px solid var(--b)"></div>
+        </div>`).join('')}
+        <div id="score-${type}" style="margin-top:10px">
+          <div style="font-size:12px;color:var(--tm);padding:8px 12px;background:var(--sl);border-radius:6px;border:1px solid var(--b)" id="score-summary-${type}">
+            Total : — / ${g.totalMax} pts &nbsp;→&nbsp; Plage : — /${g.noteMax}
+          </div>
+          <div id="note-select-${type}" style="display:none;margin-top:8px;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-size:12px;font-weight:600;color:var(--t)">Note choisie /${g.noteMax} :</span>
+            <div id="note-btns-${type}" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+          </div>
+        </div>
+      </div>`;
+    }
+  }).join('');
+  document.getElementById('score-live-global').style.display='none';
+  openModal('modal-correction');
+}
+
+function setTradLevel(type,level){
+  corrState[`${type}_level`]=level;
+  delete corrState[`${type}_score10`];
+  delete corrState[`${type}_note`];
+  // Stocker le descripteur officiel MEN
+  const g=G[type];
+  const desc=(g.desc&&g.desc[level])||'';
+  corrState[`${type}_desc`]=desc;
+  // Afficher le descripteur
+  const descEl=document.getElementById('desc-display-'+type);
+  if(descEl&&desc){
+    descEl.innerHTML=`<b>${level}</b> — ${desc}`;
+    descEl.style.display='block';
+    descEl.style.borderLeftColor=LC[level]?.bd||'var(--b)';
+  }
+  // Highlight bouton niveau
+  LEVELS.forEach(lv=>{
+    const btn=document.getElementById(`cb-${type}-lv-${lv}`);if(!btn)return;
+    const isA=lv===level;const cl=LC[lv];
+    btn.style.background=isA?cl.bg:'';btn.style.color=isA?cl.t:'';
+    btn.style.borderColor=isA?cl.bd:'';btn.style.fontWeight=isA?'700':'';
+  });
+  // Afficher les conseils ciblés cochables pour trad/transpo
+  const pc=PCOL[type];
+  const typeCibles=CONSEILS_CIBLES[type];
+  const conseilsTradEl=document.getElementById(`conseils-cibles-trad-${type}`);
+  if(conseilsTradEl&&typeCibles){
+    let html='';
+    Object.entries(typeCibles).forEach(([pointId,point])=>{
+      (point.conseils[level]||[]).forEach(c=>{
+        const cKey=`${type}_${c.id}`;
+        if(corrState[`conseil_${cKey}`]===undefined) corrState[`conseil_${cKey}`]=true;
+        const checked=corrState[`conseil_${cKey}`];
+        html+=`<label style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:6px;
+          border:1px solid ${checked?pc.bd:'var(--b)'};background:#fff;margin-bottom:4px;cursor:pointer">
+          <input type="checkbox" ${checked?'checked':''} style="margin-top:2px;accent-color:${pc.t};flex-shrink:0"
+            onchange="corrState['conseil_${cKey}']=this.checked;this.closest('label').style.borderColor=this.checked?'${pc.bd}':'var(--b)'">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:#2c2f30;margin-bottom:1px">${c.titre}</div>
+            <div style="font-size:10px;color:#595c5d;line-height:1.45">${c.texte}</div>
+          </div>
+        </label>`;
+      });
+    });
+    if(html){
+      conseilsTradEl.innerHTML=`<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:${pc.t};margin-bottom:5px">
+        Conseils à inclure dans le bilan (décoche ceux qui ne s'appliquent pas) :</div>${html}`;
+      conseilsTradEl.style.display='block';
+      conseilsTradEl.style.borderLeftColor=LC[level]?.bd||pc.bd;
+    } else {
+      conseilsTradEl.innerHTML='';conseilsTradEl.style.display='none';
+    }
+  }
+  const info=TRAD_NIVEAUX[level];
+  const scoreDiv=document.getElementById('score-'+type);
+  const scoreBtns=document.getElementById('score-btns-'+type);
+  const note4El=document.getElementById('note4-display-'+type);
+  if(scoreDiv)scoreDiv.style.display='';
+  if(note4El)note4El.textContent='';
+  if(scoreBtns){
+    scoreBtns.innerHTML=info.scores.map(s=>{
+      const n4=score10toNote4(s);
+      return`<button data-score="${s}" onclick="setTradScore('${type}',${s})"
+        style="font-size:13px;padding:7px 14px;border-radius:8px;border:1px solid var(--b);
+        background:var(--sl);color:var(--tm);cursor:pointer;">
+        ${s}<span style="font-size:10px;color:var(--tm)"> /10 → ${n4}/4</span>
+      </button>`;}).join('');
+  }
+  updateGrandTotal();
+  // Afficher les conseils ciblés pour trad/transpo
+  afficherConseilsCritere(type, G[type].critereId||type, level);
+}
+
+// Gestion trad/transpo : clic niveau → affiche les scores /10 possibles
+function setTradScore(type,score10){
+  corrState[`${type}_score10`]=score10;
+  const note4=score10toNote4(score10);
+  corrState[`${type}_note`]=note4;
+  // Highlight
+  const scoreBtns=document.getElementById('score-btns-'+type);
+  if(scoreBtns)scoreBtns.querySelectorAll('button').forEach(btn=>{
+    const isA=parseFloat(btn.dataset.score)===score10;
+    const cl=LC[corrState[`${type}_level`]||'B1'];
+    btn.style.background=isA?cl.bg:'';btn.style.color=isA?cl.t:'';
+    btn.style.borderColor=isA?cl.bd:'';btn.style.fontWeight=isA?'700':'';
+  });
+  const note4El=document.getElementById('note4-display-'+type);
+  if(note4El)note4El.innerHTML=`Score <b>${score10}/10</b> &nbsp;×4 ÷10&nbsp;= <b style="color:#7c4700;font-size:15px">${note4}/4</b>`;
+  updateGrandTotal();
+}
+
+function setCorrLevel(type,critId,level){
+  corrState[`${type}_${critId}`]=level;
+  delete corrState[`${type}_note`];
+  const g=G[type];
+  // Stocker le descripteur
+  const crit=g.criteres.find(c=>c.id===critId);
+  const desc=(crit&&crit.desc&&crit.desc[level])||'';
+  corrState[`${type}_${critId}_desc`]=desc;
+  // Afficher le descripteur inline
+  const descEl=document.getElementById(`desc-${type}-${critId}`);
+  if(descEl){
+    if(desc){descEl.textContent=desc;descEl.style.display='block';descEl.style.borderLeftColor=LC[level]?.bd||'var(--b)';}
+    else descEl.style.display='none';
+  }
+  // Mettre en évidence le bouton sélectionné
+  g.criteres.forEach(c=>{LEVELS.forEach(lv=>{
+    const btn=document.getElementById(`cb-${type}-${c.id}-${lv}`);if(!btn)return;
+    const isA=corrState[`${type}_${c.id}`]===lv;const cl=LC[lv];
+    btn.style.background=isA?cl.bg:'';btn.style.color=isA?cl.t:'';
+    btn.style.borderColor=isA?cl.bd:'';btn.style.fontWeight=isA?'700':'';
+  });});
+  // Afficher les conseils ciblés cochables pour ce critère × niveau
+  afficherConseilsCritere(type, critId, level);
+  updateScoreLive();
+}
+
+function afficherConseilsCritere(type, critId, level){
+  const pc=PCOL[type];
+  const cl=LC[level]||{};
+  const typeCibles=CONSEILS_CIBLES[type];
+  const conseilsEl=document.getElementById(`conseils-cibles-${type}-${critId}`);
+  if(!conseilsEl||!typeCibles)return;
+
+  // Cherche les conseils pour ce critère exact et ce niveau
+  const pointConseils=(typeCibles[critId]&&typeCibles[critId][level])||[];
+
+  // Pour trad/transpo : cherche aussi dans 'trad' ou 'trans'
+  const tradConseils=(type==='traduction'&&typeCibles.trad&&typeCibles.trad[level])||
+                     (type==='transposition'&&typeCibles.trans&&typeCibles.trans[level])||[];
+  const liste=pointConseils.length?pointConseils:tradConseils;
+
+  if(!liste.length){conseilsEl.innerHTML='';conseilsEl.style.display='none';return;}
+
+  let html=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:${pc.t};margin-bottom:6px">
+    À inclure dans le bilan de ${pc.label.toLowerCase()} — décoche ce qui ne s\'applique pas :</div>`;
+  liste.forEach(c=>{
+    const cKey=`${type}_${c.id}`;
+    if(corrState[`conseil_${cKey}`]===undefined) corrState[`conseil_${cKey}`]=true;
+    const checked=corrState[`conseil_${cKey}`];
+    html+=`<label style="display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border-radius:6px;
+      border:1px solid ${checked?cl.bd:'var(--b)'};background:${checked?cl.bg:'#fff'};
+      margin-bottom:5px;cursor:pointer;transition:all .12s">
+      <input type="checkbox" ${checked?'checked':''} style="margin-top:3px;accent-color:${cl.t||pc.t};flex-shrink:0;width:14px;height:14px"
+        onchange="corrState['conseil_${cKey}']=this.checked;
+          const lbl=this.closest('label');
+          lbl.style.borderColor=this.checked?'${cl.bd}':'var(--b)';
+          lbl.style.background=this.checked?'${cl.bg}':'#fff'">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:${cl.t||'#2c2f30'};margin-bottom:2px">${c.titre}</div>
+        <div style="font-size:10px;color:#595c5d;line-height:1.5">${c.texte}</div>
+      </div>
+    </label>`;
+  });
+  conseilsEl.innerHTML=html;
+  conseilsEl.style.display='block';
+  conseilsEl.style.borderLeftColor=cl.bd||pc.bd;
+}
+
+function setNoteChoisie(type,note){
+  corrState[`${type}_note`]=note;
+  const container=document.getElementById('note-btns-'+type);
+  if(!container)return;
+  container.querySelectorAll('button').forEach(btn=>{
+    const isA=parseFloat(btn.dataset.note)===note;
+    btn.style.background=isA?'#0058b9':'';btn.style.color=isA?'#fff':'';
+    btn.style.borderColor=isA?'#0058b9':'';btn.style.fontWeight=isA?'700':'';
+  });
+  updateGrandTotal();
+}
+
+function updateScoreLive(){
+  const d=devoirs.find(x=>x.id===corrCtx.devoirId);if(!d)return;
+  d.types.filter(t=>!G[t].isTrad).forEach(type=>{
+    const g=G[type];
+    const filled=(g.criteres||[]).filter(c=>corrState[`${type}_${c.id}`]).length;
+    if(!filled)return;
+    const total=g.criteres.reduce((a,c)=>a+(c.scores[corrState[`${type}_${c.id}`]]||0),0);
+    const row=CONV_TABLE_20.find(r=>total>=r.min&&total<=r.max);
+    const summaryEl=document.getElementById('score-summary-'+type);
+    if(summaryEl&&row){
+      const plageStr=row.noteMin===row.noteMax?`${row.noteMin}`:`${row.noteMin}, ${Array.from({length:row.noteMax-row.noteMin-1},(_,i)=>row.noteMin+1+i).join(', ')}${row.noteMax-row.noteMin>0?' ou '+row.noteMax:''}`;
+      summaryEl.innerHTML=`Total : <b>${total}</b> pts &nbsp;→&nbsp; Plage : <b style="color:#0058b9">${row.noteMin} à ${row.noteMax}/20</b> <span style="font-size:10px;color:var(--tm)">(${row.label})</span>`;
+    }
+    const noteSelectDiv=document.getElementById('note-select-'+type);
+    const noteBtnsDiv=document.getElementById('note-btns-'+type);
+    if(noteSelectDiv&&noteBtnsDiv&&row){
+      noteSelectDiv.style.display='flex';
+      // Génère toutes les notes entières dans la plage
+      const opts=[];
+      for(let n=row.noteMin;n<=row.noteMax;n++)opts.push(n);
+      const chosen=corrState[`${type}_note`];
+      noteBtnsDiv.innerHTML=opts.map(n=>{
+        const isA=n===chosen;
+        return`<button data-note="${n}" onclick="setNoteChoisie('${type}',${n})"
+          style="font-size:13px;padding:6px 13px;border-radius:8px;
+          border:1px solid ${isA?'#0058b9':'var(--b)'};
+          background:${isA?'#0058b9':'var(--sl)'};
+          color:${isA?'#fff':'var(--tm)'};
+          cursor:pointer;font-weight:${isA?700:400}">${n}</button>`;}).join('');
+    }
+  });
+  updateGrandTotal();
+}
+
+function updateGrandTotal(){
+  const d=devoirs.find(x=>x.id===corrCtx.devoirId);if(!d)return;
+  const live=document.getElementById('score-live-global');
+  if(d.types.length!==2){live.style.display='none';return;}
+  const ck=comboKey(d.types);const combo=COMBOS[ck];if(!combo){live.style.display='none';return;}
+  const mainType=d.types.find(t=>!G[t].isTrad);
+  const secType=d.types.find(t=>G[t].isTrad);
+  const note20=corrState[`${mainType}_note`];  // note /20 choisie par le prof
+  const note4=corrState[`${secType}_note`];    // note /4 choisie pour trad/transpo
+  live.style.display='';
+  if(note20!=null&&note4!=null){
+    // Étape 1 : note /20 → note /16 : note20 × 4 ÷ 5
+    const note16=Math.round(note20*4/5*100)/100;
+    // Étape 2 : note16 + note4 = note finale /20
+    const noteFinale=Math.round((note16+note4)*100)/100;
+    live.innerHTML=`
+      <div class="score-grand-total" style="margin-bottom:8px">
+        <span class="grand-total-label">Note finale — ${combo.label}</span>
+        <span class="grand-total-note">${noteFinale}/20</span>
+      </div>
+      <div style="font-size:12px;color:#1a5c2e;display:flex;flex-direction:column;gap:4px">
+        <div>① ${G[mainType].label} : <b>${note20}/20</b> × 4 ÷ 5 = <b>${note16}/16</b></div>
+        <div>② ${G[secType].label} : <b>${note4}/4</b></div>
+        <div style="border-top:1px solid #7ecfa0;margin-top:2px;padding-top:4px">
+          ③ Total : ${note16} + ${note4} = <b style="font-size:14px">${noteFinale}/20</b>
+        </div>
+      </div>`;
+  } else {
+    live.innerHTML=`
+      <div class="score-grand-total">
+        <span class="grand-total-label">Note finale — ${combo.label}</span>
+        <span class="grand-total-note" style="background:#aaa">—/20</span>
+      </div>
+      <div style="font-size:11px;color:#1a5c2e;margin-top:6px">
+        <div>① Choisissez une note pour ${G[mainType]?.label||'l\'épreuve principale'} (→ sera convertie en /16)</div>
+        <div>② Choisissez une note pour ${G[secType]?.label||'trad./transpo.'} (/4)</div>
+        <div>③ Le total /20 s'affiche ici automatiquement</div>
+      </div>`;
+  }
+}
+
+function saveCorrection(){
+  const s=students.find(x=>x.id===corrCtx.eleveId);if(!s)return;
+  const d=devoirs.find(x=>x.id===corrCtx.devoirId);
+  // Vérification complète
+  for(const type of d.types){
+    if(corrState[`${type}_note`]==null){
+      showToast(`Choisissez une note pour : ${G[type].label}`,'#9b1c1c');return;
+    }
+  }
+  let noteFinaleSur20=null;
+  if(d.types.length===1){
+    noteFinaleSur20=corrState[`${d.types[0]}_note`];
+  } else {
+    const mainType=d.types.find(t=>!G[t].isTrad);
+    const secType=d.types.find(t=>G[t].isTrad);
+    const note16=Math.round(corrState[`${mainType}_note`]*4/5*100)/100;
+    const note4=corrState[`${secType}_note`];
+    noteFinaleSur20=Math.round((note16+note4)*10)/10;
+  }
+  // Collecter les conseils cochés
+  const conseilsSelec={};
+  Object.keys(corrState).forEach(k=>{
+    if(k.startsWith('conseil_'))conseilsSelec[k.replace('conseil_','')]=corrState[k];
+  });
+  s.productions.push({
+    devoirId:corrCtx.devoirId,
+    criteres:{...corrState},
+    conseilsSelectionnes:conseilsSelec,
+    noteFinaleSur20,
+    commentaire:document.getElementById('corr-commentaire').value.trim(),
+    date:new Date().toISOString()
+  });
+  // Mise à jour compétences CECRL selon les niveaux saisis
+  const allLevels=d.types.flatMap(type=>{
+    if(G[type].isTrad) return corrState[`${type}_level`]?[corrState[`${type}_level`]]:[];
+    return (G[type].criteres||[]).map(c=>corrState[`${type}_${c.id}`]).filter(Boolean);
+  });
+  if(allLevels.length>0){
+    const vals=allLevels.map(l=>LI[l]||0);
+    const avgIdx=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);const nl=LEVELS[avgIdx];
+    if(d.types.includes('orale')){s.skills.PO=nl;s.skills.CO=nl;}
+    if(d.types.includes('ecrite')){s.skills.PE=nl;s.skills.CE=nl;}
+    if(d.types.some(t=>G[t].isTrad))s.skills.PE=nl;
+    s.trend=[...s.trend.slice(1),avgIdx/5];
+  }
+  closeModal('modal-correction');renderFiche();saveData();showToast('Correction enregistrée');
+}
+
+function renderClasse(){
+  const sel=document.getElementById('classe-devoir-filter');
+  sel.innerHTML='<option value="">Toutes productions</option>'+devoirs.map(d=>`<option value="${d.id}">${d.titre}</option>`).join('');
+  const dId=parseInt(sel.value)||null;
+  document.getElementById('classe-grid').innerHTML=students.map(s=>{
+    const avg=avgLevel(s.skills);const cl=lc(avg);const av=avCol(s.id);
+    const prod=dId?s.productions.find(p=>p.devoirId===dId):null;
+    const tBars=s.trend.map((v,i)=>`<span style="height:${Math.round(v*100)}%;background:${cl.bar};opacity:${i===s.trend.length-1?1:0.4}"></span>`).join('');
+    return`<div class="classe-cell" onclick="openFiche(${s.id})">
+      <div class="avatar" style="background:${av.bg};color:${av.t};width:36px;height:36px;font-size:13px;margin:0 auto 8px">${initials(s.name)}</div>
+      <div style="font-size:12px;font-weight:500;color:var(--t);margin-bottom:2px">${s.name.split(' ')[0]}</div>
+      <div class="trend-bars">${tBars}</div>${chip(avg)}
+      <div style="font-size:10px;color:var(--tm);margin-top:5px">${dId?(prod?'✓ Corrigé·e':'— À corriger'):`${s.productions.length} prod.`}</div>
+    </div>`;}).join('');
+}
+
+function renderDevoirs(){
+  const list=document.getElementById('devoirs-list');
+  if(!devoirs.length){list.innerHTML='<div class="empty-state">Aucun devoir créé.</div>';return;}
+  list.innerHTML=devoirs.map(d=>{
+    const cnt=students.filter(s=>s.productions.find(p=>p.devoirId===d.id)).length;
+    const dateStr=d.date?new Date(d.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):'';
+    const tags=d.types.map(t=>{const pc=PCOL[t];return`<span style="font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:${pc.bg};color:${pc.t};border:1px solid ${pc.bd}">${pc.label}</span>`;}).join(' ');
+    const ck=d.types.length===2?comboKey(d.types):null;const combo=ck?COMBOS[ck]:null;
+    const nonCorr=students.filter(s=>!s.productions.find(p=>p.devoirId===d.id));
+    return`<div class="devoir-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div><div style="font-size:14px;font-weight:600;color:var(--t)">${d.titre}</div>
+          <div style="font-size:11px;color:var(--tm);margin-top:3px">${dateStr} · ${cnt}/${students.length} corrigé${cnt>1?'s':''}${combo?' · '+combo.label:''}</div></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">${tags}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        ${nonCorr.map(s=>`<button class="btn-sm" onclick="openFicheAndCorr(${s.id},${d.id})">${s.name.split(' ')[0]} +</button>`).join('')}
+        ${!nonCorr.length?'<span style="font-size:12px;color:#1a5c2e;font-weight:600">Tous corrigé·e·s ✓</span>':''}
+        <button class="btn-sm" style="margin-left:auto;color:#9b1c1c;border-color:#f5b3b3;font-size:11px" onclick="supprimerDevoir(${d.id})">✕ Supprimer</button>
+      </div></div>`;}).join('');
+}
+function openFicheAndCorr(eId,dId){openFiche(eId);}
+
+function toggleEpreuve(type,btn){
+  const idx=selectedEpreuves.indexOf(type);
+  if(idx>=0){selectedEpreuves.splice(idx,1);btn.classList.remove('sel');}
+  else{if(selectedEpreuves.length>=2){showToast('Maximum 2 épreuves par devoir');return;}selectedEpreuves.push(type);btn.classList.add('sel');}
+  const p=document.getElementById('combo-preview');
+  if(!selectedEpreuves.length){p.textContent='Sélectionnez au moins une épreuve.';return;}
+  let msg=selectedEpreuves.map(t=>PCOL[t].label).join(' + ');
+  if(selectedEpreuves.length===2){const ck=comboKey(selectedEpreuves);const combo=COMBOS[ck];if(combo)msg+=` → note finale ${combo.finalLabel}`;else msg+=' (combinaison non standard)';}
+  p.textContent=msg;
+}
+
+function addDevoir(){
+  const titre=document.getElementById('dev-titre').value.trim();if(!titre){document.getElementById('dev-titre').focus();return;}
+  if(!selectedEpreuves.length){showToast('Sélectionnez au moins une épreuve');return;}
+  const date=document.getElementById('dev-date').value;
+  devoirs.push({id:nextDId++,titre,types:[...selectedEpreuves],date});
+  selectedEpreuves=[];document.querySelectorAll('.ep-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('combo-preview').textContent='Sélectionnez au moins une épreuve.';
+  document.getElementById('dev-titre').value='';closeModal('modal-devoir');renderDevoirs();saveData();showToast('Devoir créé');
+}
+
+function ajouterClasse(){
+  const nom=document.getElementById('new-classe-nom').value.trim();
+  if(!nom)return;
+  classes.push({id:nextClId++,nom});
+  document.getElementById('new-classe-nom').value='';
+  renderClassesModal();renderSelecteurs();saveData();
+}
+function supprimerClasse(id){
+  const nb=students.filter(s=>s.classeId===id).length;
+  if(nb>0&&!window.confirm(`${nb} élève${nb>1?'s':''} dans cette classe. Supprimer quand même ?`))return;
+  classes=classes.filter(c=>c.id!==id);
+  students.forEach(s=>{if(s.classeId===id)s.classeId=null;});
+  renderClassesModal();renderSelecteurs();renderAll();saveData();
+}
+function renderClassesModal(){
+  const list=document.getElementById('classes-list');
+  if(!list)return;
+  if(!classes.length){list.innerHTML='<div style="font-size:12px;color:var(--tm)">Aucune classe créée.</div>';return;}
+  list.innerHTML=classes.map(c=>{
+    const nb=students.filter(s=>s.classeId===c.id).length;
+    return`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--sl);border-radius:var(--radius);margin-bottom:6px">
+      <span style="font-size:13px;color:var(--t)">${c.nom} <span style="font-size:11px;color:var(--tm)">(${nb} élève${nb>1?'s':''})</span></span>
+      <button class="btn-sm" style="font-size:11px;color:#9b1c1c;border-color:#f5b3b3;padding:3px 9px" onclick="supprimerClasse(${c.id})">✕</button>
+    </div>`;}).join('');
+}
+function renderSelecteurs(){
+  // Filtre classes dans la liste élèves
+  const fc=document.getElementById('filter-classe');
+  if(fc){
+    const val=fc.value;
+    fc.innerHTML='<option value="">Toutes les classes</option>'+classes.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
+    fc.value=val;
+  }
+  // Sélecteur de classe dans modal-eleve
+  const nc=document.getElementById('new-classe');
+  if(nc) nc.innerHTML=classes.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
+}
+
+function renderAll(){renderStats();renderList();renderSelecteurs();}
+
+function supprimerDevoir(id){
+  const d=devoirs.find(x=>x.id===id);if(!d)return;
+  const nbCorr=students.filter(s=>s.productions.find(p=>p.devoirId===id)).length;
+  const msg=nbCorr>0
+    ?`Supprimer "${d.titre}" ? ${nbCorr} correction${nbCorr>1?'s':''} seront également effacées.`
+    :`Supprimer "${d.titre}" ?`;
+  document.getElementById('modal-confirm-delete-titre').textContent=msg;
+  document.getElementById('modal-confirm-delete').dataset.devoirId=id;
+  document.getElementById('modal-confirm-delete').classList.add('open');
+}
+function supprimerDevoirConfirmed(){
+  const id=parseInt(document.getElementById('modal-confirm-delete').dataset.devoirId);
+  devoirs=devoirs.filter(x=>x.id!==id);
+  students.forEach(s=>{ s.productions=s.productions.filter(p=>p.devoirId!==id); });
+  document.getElementById('modal-confirm-delete').classList.remove('open');
+  renderDevoirs();saveData();showToast('Devoir supprimé');
+}
+
+function addStudent(){
+  const name=document.getElementById('new-name').value.trim();if(!name){document.getElementById('new-name').focus();return;}
+  const genre=document.querySelector('input[name="new-genre"]:checked')?.value||'F';
+  const classeId=parseInt(document.getElementById('new-classe').value)||null;
+  students.push({
+    id:nextSId++,name,genre,classeId,
+    skills:{CO:null,PO:null,CE:null,PE:null},
+    trend:[],
+    productions:[]
+  });
+  closeModal('modal-eleve');document.getElementById('new-name').value='';renderAll();saveData();showToast(`${name} ajouté·e`);
+}
+
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='modal-classes') renderClassesModal();
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+
+function printFiche(id){
+  const s=students.find(x=>x.id===id);if(!s)return;
+  const avg=avgLevel(s.skills);
+  const cc=lc(avg);
+
+  // Section compétences
+  const skillsHtml=Object.entries(SKL).map(([k,label])=>`
+    <tr>
+      <td style="padding:5px 10px;color:#555;width:50%">${label}</td>
+      <td style="padding:5px 10px;font-weight:700;color:${LC[s.skills[k]]?.t||'#333'}">${s.skills[k]}</td>
+    </tr>`).join('');
+
+  // Section conseils
+  const conseilsHtml=(CONSEILS[avg]||[]).map(c=>`<li style="margin-bottom:5px">${c}</li>`).join('');
+
+  // Section productions avec descripteurs
+  const prodsHtml=s.productions.map(p=>{
+    const d=devoirs.find(x=>x.id===p.devoirId);if(!d)return'';
+    const dateStr=d.date?new Date(d.date).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';
+    let epHtml='';
+    d.types.forEach(type=>{
+      const g=G[type];const pc=PCOL[type];
+      const cl=`border-left:4px solid ${pc.bd};background:${pc.bg};padding:8px 12px;margin:6px 0;border-radius:0 6px 6px 0`;
+      if(g.isTrad){
+        const level=p.criteres?.[`${type}_level`]||'—';
+        const score10=p.criteres?.[`${type}_score10`]||'—';
+        const note4=p.criteres?.[`${type}_note`]||'—';
+        const desc=p.criteres?.[`${type}_desc`]||'';
+        epHtml+=`<div style="${cl}">
+          <div style="font-size:12px;font-weight:700;color:${pc.t};margin-bottom:4px">${pc.label}</div>
+          <div style="font-size:12px"><b>Niveau :</b> ${level} &nbsp;|&nbsp; Score : ${score10}/10 &nbsp;|&nbsp; <b>Note : ${note4}/4</b></div>
+          ${desc?`<div style="font-size:11px;color:#555;margin-top:4px;font-style:italic">"${desc}"</div>`:''}
+        </div>`;
+      } else {
+        const critRows=(g.criteres||[]).map(c=>{
+          const lv=p.criteres?.[`${type}_${c.id}`]||'—';
+          const pts=lv!=='—'?c.scores[lv]||0:0;
+          const desc=p.criteres?.[`${type}_${c.id}_desc`]||'';
+          return`<tr>
+            <td style="padding:4px 8px;color:#555;font-size:11px;width:35%">${c.name}</td>
+            <td style="padding:4px 8px;font-weight:700;font-size:12px;color:${LC[lv]?.t||'#333'};width:15%">${lv}</td>
+            <td style="padding:4px 8px;color:#777;font-size:10px">${pts} pts</td>
+            <td style="padding:4px 8px;font-size:10px;color:#444;font-style:italic">${desc}</td>
+          </tr>`;}).join('');
+        const total=(g.criteres||[]).reduce((a,c)=>a+(c.scores[p.criteres?.[`${type}_${c.id}`]]||0),0);
+        const row=CONV_TABLE_20.find(r=>total>=r.min&&total<=r.max);
+        const noteChoisie=p.criteres?.[`${type}_note`];
+        const isCombo=d.types.length===2;
+        const note16=isCombo&&noteChoisie!=null?Math.round(noteChoisie*4/5*100)/100:null;
+        epHtml+=`<div style="${cl}">
+          <div style="font-size:12px;font-weight:700;color:${pc.t};margin-bottom:6px">${pc.label}</div>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:6px">${critRows}</table>
+          <div style="font-size:11px;color:#333;border-top:1px solid ${pc.bd};padding-top:5px;margin-top:4px">
+            Total : <b>${total} pts</b>
+            ${row?` &nbsp;→&nbsp; Plage : <b style="color:#0058b9">${row.noteMin}–${row.noteMax}/20</b> (${row.label})`:''}
+            ${noteChoisie!=null?` &nbsp;|&nbsp; <b>Note choisie : ${noteChoisie}/20</b>`:''}
+            ${note16!=null?` &nbsp;→&nbsp; <b>${note16}/16</b> (couplé)`:''}
+          </div>
+        </div>`;
+      }
+    });
+    const noteFinale=p.noteFinaleSur20;
+    const ck=d.types.length===2?comboKey(d.types):null;
+    const combo=ck?COMBOS[ck]:null;
+    return`<div style="border:1px solid #ddd;border-radius:8px;padding:12px 14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div><div style="font-size:14px;font-weight:700;color:#2c2f30">${d.titre}</div>
+          <div style="font-size:11px;color:#777">${dateStr}${combo?' · '+combo.label:''}</div></div>
+        ${noteFinale!=null?`<div style="font-size:20px;font-weight:700;background:#1a5c2e;color:#fff;padding:6px 18px;border-radius:8px">${noteFinale}/20</div>`:''}
+      </div>
+      ${epHtml}
+      ${p.commentaire?`<div style="margin-top:8px;padding:8px 12px;background:#fffde7;border-left:4px solid #ffe57a;border-radius:0 6px 6px 0;font-size:12px;color:#5a4800"><b>Commentaire :</b> ${p.commentaire}</div>`:''}
+    </div>`;}).join('');
+
+  const htmlFiche=`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Bilan ${s.name}</title>
+<style>
+  body{font-family:Arial,sans-serif;padding:2rem 2.5rem;font-size:13px;line-height:1.6;color:#2c2f30;max-width:800px;margin:0 auto}
+  h1{font-size:20px;font-weight:700;margin-bottom:4px}
+  h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin:1.5rem 0 .5rem;padding-bottom:4px;border-bottom:1px solid #eee}
+  table{width:100%;border-collapse:collapse}
+  .print-btn{margin-bottom:1.5rem;padding:8px 18px;cursor:pointer;font-size:13px;border-radius:6px;border:none;background:#0058b9;color:#fff}
+  @media print{.print-btn{display:none}body{padding:1rem}}
+</style></head><body>
+<button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+<h1>${s.name} — Bilan de compétences</h1>
+<p style="color:#666;font-size:12px;margin-bottom:1rem">
+  Ton niveau moyen CECRL : <strong style="color:${cc.t}">${avg}</strong> &nbsp;|&nbsp;
+  ${s.productions.length} production${s.productions.length>1?'s':''} évaluée${s.productions.length>1?'s':''}
+</p>
+<h2>Tes compétences langagières (CECRL)</h2>
+<table style="margin-bottom:1rem"><tbody>${skillsHtml}</tbody></table>
+<h2>Pour progresser — niveau ${avg}</h2>
+<ul style="margin:0 0 1rem;padding-left:1.5rem;color:#333">${conseilsHtml}</ul>
+<h2>Tes évaluations détaillées</h2>
+${prodsHtml||'<p style="color:#999">Aucune production enregistrée.</p>'}
+<p style="margin-top:2rem;font-size:10px;color:#aaa">Grilles officielles MEN — LLCER AMC Terminale</p>
+</body></html>`;
+
+  const blobFiche=new Blob([htmlFiche],{type:'text/html;charset=utf-8'});
+  const urlFiche=URL.createObjectURL(blobFiche);
+  const aFiche=document.createElement('a');
+  aFiche.href=urlFiche;
+  aFiche.download=`bilan-global-${s.name.replace(/\s+/g,'-')}.html`;
+  document.body.appendChild(aFiche);
+  aFiche.click();
+  setTimeout(()=>{URL.revokeObjectURL(urlFiche);document.body.removeChild(aFiche);},1000);
+  showToast('Bilan global téléchargé');
+}
+
+// ─── CONSEILS DÉTAILLÉS PAR ÉPREUVE ET PAR NIVEAU ───────────────────────────
+const CONSEILS_DEVOIR={
+  ecrite:{
+    titre:'Expression écrite — Synthèse de documents',
+    intro:'La synthèse LLCER-AMC évalue ta capacité à mettre en réseau plusieurs documents (textes, images, graphiques) autour d\'un thème commun. Il ne s\'agit pas de résumer chaque document séparément, mais de construire une réponse organisée qui fait dialoguer les sources.',
+    par_niveau:{
+      A1:{
+        bilan:'Ta production montre une compréhension très partielle du dossier. Les idées restent isolées et la langue présente de nombreuses erreurs qui gênent la compréhension.',
+        conseils:[
+          'Entraîne-toi à lire des textes courts en anglais chaque jour (BBC Learning English, niveau elementary).',
+          'Travaille le vocabulaire de base du thème avec des flashcards (Anki) : au moins 10 mots nouveaux par semaine.',
+          'Recopie et mémorisez des phrases-modèles pour introduire une idée : "The document shows that…", "According to the author…"',
+          'Avant d\'écrire, listez en français les 3 idées principales du dossier, puis essayez de les formuler en anglais simple.',
+          'Évite de traduire mot à mot depuis le français : construisez des phrases courtes et sûres.',
+        ]
+      },
+      A2:{
+        bilan:'Tu montres une compréhension de quelques aspects du dossier, mais la synthèse reste superficielle et les documents sont peu mis en relation. La langue est globalement compréhensible malgré des erreurs.',
+        conseils:[
+          'Travaille la structure : introduction (thème + problématique) → 2-3 parties organisées → conclusion. Utilise un plan avant d\'écrire.',
+          'Entraîne-toi à faire des phrases de liaison entre les documents : "While Document 1 focuses on… Document 2 argues that…"',
+          'Enrichis ton vocabulaire des connecteurs : however, furthermore, in contrast, as a result, this suggests that…',
+          'Lis des articles de presse en anglais 3 fois par semaine (The Guardian, BBC News) pour te familiariser avec le registre formel.',
+          'Relis ta production et vérifiez : chaque paragraphe cite-t-il au moins 2 documents différents ?',
+        ]
+      },
+      B1:{
+        bilan:'Ta synthèse traite les principaux enjeux du dossier et montre une compréhension satisfaisante. Les documents sont en partie mis en relation, mais des nuances t\'échappent encore.',
+        conseils:[
+          'Approfondis la mise en réseau des documents : cherchez les accords, les contradictions et les complémentarités entre les sources.',
+          'Travaille l\'introduction : elle doit présenter le thème, les documents ET une problématique (une question centrale).',
+          'Diversifie ta syntaxe : alternez phrases simples et complexes (relatives, subordonnées de cause/conséquence).',
+          'Pour les documents non-textuels (images, graphiques), entraîne-toi à décrire puis interpréter : "The image depicts… which suggests…"',
+          'Après chaque devoir, identifie tes 3 erreurs récurrentes et travaillez-les spécifiquement.',
+        ]
+      },
+      B2:{
+        bilan:'Ta synthèse est globalement pertinente et bien construite. Tu exploites le dossier de manière satisfaisante. Pour progresser vers C1, travaillez la finesse des nuances et l\'originalité de l\'analyse.',
+        conseils:[
+          'Développe ta capacité à nuancer : "While this is broadly true, it is worth noting that…", "This view, however, overlooks…"',
+          'Intègre des références (inter)culturelles pour enrichir l\'analyse : contexte historique, comparaison avec d\'autres pays, autres artistes/auteurs.',
+          'Travaille la cohésion textuelle : chaque paragraphe doit s\'enchaîner logiquement avec le suivant (transition phrases).',
+          'Élargis ton vocabulaire idiomatique : expressions figées, collocations, registres variés.',
+          'Lis des synthèses modèles C1 et analysez leur structure : comment sont articulées les idées ? Quel niveau de langue ?',
+        ]
+      },
+      C1:{
+        bilan:'Excellente synthèse : ton analyse est fine, nuancée et s\'appuie sur une compréhension profonde du dossier. Les enjeux (inter)culturels sont bien mis en lumière. Continue à viser la précision stylistique.',
+        conseils:[
+          'Affine ta maîtrise des registres : sachez passer d\'un registre académique à un registre analytique selon les besoins.',
+          'Travaille l\'implicite : au-delà de ce que dit le texte, qu\'est-ce qu\'il ne dit pas ? Quel est le sous-texte culturel ?',
+          'Lis des essais et des critiques en anglais (The Atlantic, London Review of Books) pour nourrir ton argumentation.',
+          'En production, visez l\'élégance stylistique : variété des structures, précision lexicale, absence de répétitions.',
+          'Entraîne-toi à présenter ta synthèse à voix haute en 2-3 minutes.',
+        ]
+      },
+      C2:{
+        bilan:'Niveau exceptionnel : ta production témoigne d\'une maîtrise complète de l\'exercice. Tu rends les nuances les plus fines du dossier avec précision et pertinence.',
+        conseils:[
+          'Maintiens ce niveau en lisant régulièrement de la presse et des essais anglophones de haut niveau.',
+          'Explore la rhétorique anglophone avancée : comment construire un argument irréfutable en peu de mots ?',
+          'Entraîne-toi à la version et à la transposition pour affiner encore ta sensibilité linguistique.',
+        ]
+      },
+    }
+  },
+  orale:{
+    titre:'Expression orale — Présentation et interaction',
+    intro:'L\'épreuve orale LLCER-AMC évalue ta capacité à développer une argumentation structurée sur un thème du programme, à interagir avec l\'examinateur et à mobiliser tes connaissances (inter)culturelles. La maîtrise phonologique et la fluidité sont aussi évaluées.',
+    par_niveau:{
+      A1:{
+        bilan:'Ton expression orale est très limitée. Les hésitations sont fréquentes et la communication repose sur des éléments très basiques. C\'est un niveau à dépasser rapidement.',
+        conseils:[
+          'Écoute l\'anglais chaque jour : podcasts pour débutants, séries avec sous-titres anglais, YouTube en anglais.',
+          'Répète à voix haute des phrases courtes mémorisées : construisez un répertoire de formules de base.',
+          'Enregistre-toi chaque semaine sur un sujet simple (30 secondes) et réécoute-toi pour identifier tes erreurs.',
+          'Travaille la phonologie : prononciation des voyelles longues/courtes, accentuation des mots clés.',
+          'Parle anglais à chaque occasion, même en faisant des erreurs : la fluidité vient avec la pratique.',
+        ]
+      },
+      A2:{
+        bilan:'Tu exprimes des idées simples mais le discours reste bref et juxtaposé. L\'interaction est limitée. Un travail régulier à l\'oral est indispensable.',
+        conseils:[
+          'Prépare et entraîne-toi à des présentations courtes (1 minute) sur des sujets du programme AMC.',
+          'Travaille les connecteurs à l\'oral : "First of all… Then… However… To conclude…"',
+          'Participe activement en cours : chaque intervention, même courte, est un entraînement.',
+          'Écoute des interviews en anglais (BBC, NPR) et notez comment les locuteurs structurent leurs réponses.',
+          'Entraîne-toi à répondre à des questions imprévues : demande à quelqu\'un de te poser des questions sur un document.',
+        ]
+      },
+      B1:{
+        bilan:'Tu développes un point de vue de manière simple avec quelques exemples. La structure est présente mais les nuances manquent. Continue à pratiquer régulièrement.',
+        conseils:[
+          'Enrichis vos présentations avec des références culturelles précises : œuvres, événements historiques, personnalités.',
+          'Travaille la relance : si l\'examinateur pose une question, reformulez avant de répondre ("If I understand correctly, you\'re asking…").',
+          'Entraîne-toi à exprimer des opinions nuancées : "On the one hand… On the other hand… Although… Nevertheless…"',
+          'Réduis les hésitations en préparant mieux ton plan avant de parler : 3 idées clés, 2 exemples par idée.',
+          'Écoute des TED Talks sur des sujets liés au programme AMC et analysez la structure de l\'argumentaire.',
+        ]
+      },
+      B2:{
+        bilan:'Ton oral est pertinent et bien argumenté. Tu peux nuancer et relancer la discussion. Pour passer à C1, travaillez la fluidité et la richesse des références.',
+        conseils:[
+          'Développe ta capacité à improviser : entraîne-toi à parler sur un document inconnu pendant 2 minutes sans préparation.',
+          'Enrichis vos références (inter)culturelles : connaissez des exemples précis pour chaque grand thème du programme.',
+          'Travaille la prosodie : intonation, rythme, emphase sur les mots importants.',
+          'Lors des interactions, n\'attendez pas que l\'examinateur pose des questions : prenez des initiatives ("I\'d also like to mention…").',
+          'Lis des éditoriaux en anglais et entraîne-toi à en résumer l\'argumentation à l\'oral.',
+        ]
+      },
+      C1:{
+        bilan:'Ton oral est fluide, argumenté et culturellement ancré. Tu gères l\'interaction avec aisance. Vise maintenant la précision phonologique et la spontanéité totale.',
+        conseils:[
+          'Entraîne-toi à réagir à des documents inédits et complexes avec un minimum de préparation.',
+          'Affine ta prononciation : travaillez les sons qui distinguent les registres soutenu et courant.',
+          'Développe ta capacité à exploiter l\'humour, l\'ironie ou la métaphore dans ton discours.',
+          'Prépare-toi à des questions déstabilisantes : as-tu un avis contraire à défendre ?',
+        ]
+      },
+      C2:{
+        bilan:'Niveau exceptionnel à l\'oral : tu maîtrises tous les aspects de la communication orale en anglais, y compris les plus subtils.',
+        conseils:[
+          'Maintiens ce niveau en pratiquant régulièrement des débats et discussions complexes en anglais.',
+          'Explore des registres variés : académique, journalistique, littéraire, familier selon le contexte.',
+        ]
+      },
+    }
+  },
+  traduction:{
+    titre:'Traduction (Version) — Anglais vers français',
+    intro:'La version (traduction anglais → français) évalue ta capacité à restituer fidèlement le sens d\'un texte anglais en français correct et idiomatique. Il ne s\'agit pas de traduire mot à mot, mais de trouver les équivalents naturels en français tout en respectant le registre et le style du texte source.',
+    par_niveau:{
+      A1:{
+        bilan:'Tu traduis quelques mots et expressions simples, mais la traduction reste très partielle et peu compréhensible. L\'essentiel du sens est perdu.',
+        conseils:[
+          'Travaille le vocabulaire de base : 10 mots nouveaux par jour avec leur contexte d\'emploi.',
+          'Entraîne-toi à reconnaître les faux-amis courants : eventually ≠ éventuellement, actually ≠ actuellement.',
+          'Lis des textes bilingues courts et compare ta traduction avec la version officielle.',
+          'Concentre-toi d\'abord sur le sens global avant de chercher les mots précis.',
+          'Note les expressions figées et les collocations fréquentes en anglais.',
+        ]
+      },
+      A2:{
+        bilan:'Ta traduction est approximative mais compréhensible malgré des erreurs. Le sens général est souvent présent mais les nuances sont perdues.',
+        conseils:[
+          'Identifie tes erreurs les plus fréquentes : calques syntaxiques, faux-amis, registre inadapté.',
+          'Travaille les procédés de traduction de base : transposition (verbe → nom), modulation (point de vue), équivalence (expressions figées).',
+          'Pour chaque phrase difficile, demande-toi : "Comment dirait-on cela naturellement en français ?"',
+          'Évite de coller à la structure anglaise : restructurez la phrase si nécessaire.',
+          'Lis des traductions professionnelles (romans, articles) et analysez les choix du traducteur.',
+        ]
+      },
+      B1:{
+        bilan:'Ta traduction est globalement compréhensible mais reste parfois trop proche de l\'original. Des imprécisions nuisent à la fidélité.',
+        conseils:[
+          'Travaille la modulation : changez de point de vue quand la structure anglaise ne passe pas en français ("The car wouldn\'t start" → "La voiture refusait de démarrer").',
+          'Repère les structures spécifiquement anglaises à restructurer : gérondif, participe présent détaché, passif fréquent.',
+          'Pour le registre : vérifie que ta traduction a le même ton que l\'original (soutenu, neutre, familier).',
+          'Consulte un dictionnaire de collocations français pour trouver les associations naturelles de mots.',
+          'Relis ta traduction à voix haute en oubliant l\'anglais : est-ce que cela sonne naturel en français ?',
+        ]
+      },
+      B2:{
+        bilan:'Ta traduction est claire et fidèle au sens, même si elle reste parfois trop proche de la syntaxe anglaise. Travaille la fluidité et l\'élégance.',
+        conseils:[
+          'Approfondis les procédés de Vinay & Darbelnet : étoffement, dépouillement, adaptation culturelle.',
+          'Travaille l\'équivalence des expressions idiomatiques : cherchez l\'expression française équivalente, pas la traduction littérale.',
+          'Sois attentif aux spécificités stylistiques du texte : humour, ironie, jeux de mots — comment les rendre en français ?',
+          'Pour les termes culturellement marqués (American English, British English), trouvez l\'équivalent culturel français.',
+          'Compare tes traductions avec des versions professionnelles et analysez les différences.',
+        ]
+      },
+      C1:{
+        bilan:'Ta traduction est fidèle et fluide. Tu rends le sens et le style avec précision. Pour atteindre C2, travaillez les spécificités stylistiques les plus fines.',
+        conseils:[
+          'Travaille la restitution des effets stylistiques : rythme, allitération, registre soutenu, ironie.',
+          'Entraîne-toi sur des textes littéraires et journalistiques variés pour développer ton répertoire.',
+          'Lis des traductions primées et analysez les choix du traducteur pour les passages difficiles.',
+          'Attention aux "belles infidèles" : une traduction trop libre peut perdre l\'essence du texte.',
+        ]
+      },
+      C2:{
+        bilan:'Traduction d\'une précision et d\'une finesse remarquables. Tu rends les nuances stylistiques avec habileté.',
+        conseils:[
+          'Continue à lire et traduire des textes complexes pour maintenir ce niveau d\'excellence.',
+          'Explore la traduction littéraire pour affiner encore ta sensibilité aux mots.',
+        ]
+      },
+    }
+  },
+  transposition:{
+    titre:'Transposition — Compte-rendu en français',
+    intro:'La transposition (ou compte-rendu) consiste à restituer en français, de manière synthétique, le contenu d\'un texte anglais. Contrairement à la traduction, tu reformules librement avec tes propres mots. L\'objectif est de transmettre fidèlement les idées principales, les arguments et les points de vue du texte, dans un français correct et fluide. La longueur attendue est environ un tiers du texte source.',
+    par_niveau:{
+      A1:{
+        bilan:'Tu extrais quelques informations isolées mais la transposition est très incomplète et partiellement compréhensible. Les idées essentielles sont manquantes.',
+        conseils:[
+          'Commence par identifier le thème général du texte avant de lire en détail.',
+          'Surligne les mots-clés et les idées principales de chaque paragraphe.',
+          'Entraîne-toi à résumer un paragraphe en une phrase en français.',
+          'Travaille le vocabulaire des connecteurs logiques en français : de plus, cependant, ainsi, en revanche.',
+          'Ne cherchez pas à tout transmettre : priorisez les 3-4 idées les plus importantes.',
+        ]
+      },
+      A2:{
+        bilan:'Tu transmets les informations principales dans une langue simple, mais la transposition est encore approximative et des idées importantes manquent.',
+        conseils:[
+          'Structure ta transposition : une introduction (thème + source), un développement (idées principales), une conclusion.',
+          'Entraîne-toi à identifier la thèse de l\'auteur et ses principaux arguments.',
+          'Utilise des verbes d\'introduction : l\'auteur affirme que… / l\'article souligne… / selon le texte…',
+          'Reformule avec tes propres mots : ne copiez pas de phrases entières du texte source.',
+          'Vérifie le registre : le français doit être neutre et soutenu, pas familier.',
+        ]
+      },
+      B1:{
+        bilan:'Ta transposition restitue les points essentiels du texte dans une langue globalement appropriée. Quelques imprécisions ou oublis subsistent.',
+        conseils:[
+          'Approfondis la restitution des arguments : ne résumez pas seulement les faits, restituez le raisonnement de l\'auteur.',
+          'Travaille la reformulation : évitez les calques de la syntaxe anglaise en français.',
+          'Sois attentif aux nuances : l\'auteur est-il affirmatif, sceptique, ironique ? Rends ces nuances.',
+          'Vérifie la longueur : la transposition doit faire environ un tiers du texte source.',
+          'Relis pour éliminer les répétitions et améliorer la fluidité.',
+        ]
+      },
+      B2:{
+        bilan:'Ta transposition est fidèle et bien rédigée. Tu restitues l\'essentiel du contenu avec une langue appropriée. Travaille la finesse de la restitution.',
+        conseils:[
+          'Rends les nuances de l\'auteur : distinguez ce qui est présenté comme un fait, une opinion, une crainte, une espoir.',
+          'Travaille la cohérence textuelle : ta transposition doit lire comme un texte autonome, pas comme une liste.',
+          'Intègre des marqueurs de prise en charge énonciative : "selon l\'auteur", "d\'après l\'article", "le texte suggère que".',
+          'Pour les passages complexes, demande-toi : quelle est l\'idée centrale de ce passage ? Formule-la en une phrase.',
+          'Enrichis ton vocabulaire de la reformulation en français (synonymes, périphrases, constructions alternatives).',
+        ]
+      },
+      C1:{
+        bilan:'Excellente transposition : tu restitues fidèlement la complexité et les nuances du texte dans une langue française précise et fluide.',
+        conseils:[
+          'Travaille la restitution des implicites : ce que le texte ne dit pas explicitement mais qui est suggéré.',
+          'Affine ta capacité à rendre le ton du texte (sarcastique, engagé, académique, journalistique).',
+          'Entraîne-toi sur des textes de plus en plus complexes et techniques.',
+          'Vérifie l\'équilibre : toutes les parties du texte doivent être représentées proportionnellement.',
+        ]
+      },
+      C2:{
+        bilan:'Niveau exceptionnel : ta transposition restitue avec précision et finesse la totalité du contenu, y compris les implicites et le ton.',
+        conseils:[
+          'Maintiens ce niveau par une pratique régulière sur des textes variés et complexes.',
+          'Explore des textes de différents registres pour diversifier encore ta maîtrise.',
+        ]
+      },
+    }
+  },
+};
+
+// ─── CONSEILS CIBLÉS PAR POINT D'ERREUR ──────────────────────────────────────
+// Courts, directs, ton "tu", actionnables immédiatement
+const CONSEILS_CIBLES = {
+
+  // ════════════════════════════════════════════════════════
+  //  EXPRESSION ÉCRITE — SYNTHÈSE
+  // ════════════════════════════════════════════════════════
+  ecrite: {
+
+    comprehension: {
+      label: 'Compréhension et pertinence',
+      conseils: [
+        {id:'ec_c1', titre:'Mieux cerner le sujet', texte:'Tu as de bonnes idées — veille à les relier à la question posée. Relis la consigne après chaque paragraphe pour t\'assurer que ta réflexion reste bien ancrée dans le sujet.'},
+        {id:'ec_c2', titre:'Vérifier le sens des documents', texte:'Prends le temps de lire chaque document deux fois : une première fois pour capter le sens général, une deuxième pour en saisir les nuances. Cela t\'aidera à éviter les contresens.'},
+        {id:'ec_c3', titre:'Aller au-delà des idées de surface', texte:'Tu identifies bien les idées principales. L\'étape suivante consiste à aller plus loin : pourquoi l\'auteur dit-il cela ? Qu\'est-ce que ça révèle sur la société ou la culture dont il parle ?'},
+        {id:'ec_c4', titre:'Analyser plutôt que résumer', texte:'Ta synthèse restitue fidèlement les documents — c\'est un bon point de départ. Pour progresser, cherche à interpréter les idées plutôt que simplement les rapporter.'},
+        {id:'ec_c5', titre:'Exploiter tous les documents', texte:'Chaque document du dossier a quelque chose à apporter à ta réflexion. Essaie de les intégrer tous, même ceux qui semblent redondants : ils disent souvent la même chose différemment.'},
+        {id:'ec_c6', titre:'Saisir les nuances de l\'auteur', texte:'Fais attention au ton employé par l\'auteur : est-il affirmatif, nuancé, critique ? Repérer ces intentions enrichit considérablement ton analyse.'},
+        {id:'ec_c7', titre:'Mobiliser ses connaissances culturelles', texte:'Tes connaissances culturelles sont un vrai atout — utilise-les ! Ancre tes idées dans des événements, des mouvements ou des contextes précis liés au programme.'},
+      ]
+    },
+
+    structure: {
+      label: 'Structure et organisation',
+      conseils: [
+        {id:'ec_s1', titre:'Construire un plan solide', texte:'Avant d\'écrire, prends le temps d\'organiser tes idées : 2 ou 3 grandes parties, chacune avec un message clair. Un plan bien construit rend la rédaction beaucoup plus fluide.'},
+        {id:'ec_s2', titre:'Soigner l\'introduction', texte:'L\'introduction est ta première impression sur le lecteur. Elle doit présenter le thème, dégager un fil conducteur et annoncer ton plan de façon claire et concise.'},
+        {id:'ec_s3', titre:'Un paragraphe, une idée', texte:'Chaque paragraphe gagne à défendre une seule idée centrale. Cela rend ton argumentation plus claire et plus convaincante.'},
+        {id:'ec_s4', titre:'Soigner la conclusion', texte:'La conclusion est l\'occasion de montrer que tu as une vraie réflexion sur le sujet. Rappelle les grandes lignes de ton analyse et ouvre sur une perspective plus large.'},
+        {id:'ec_s5', titre:'Équilibrer les parties', texte:'Veille à développer tes idées de façon comparable d\'une partie à l\'autre. Un bon équilibre montre que tu maîtrises l\'ensemble du dossier.'},
+        {id:'ec_s6', titre:'Annoncer clairement chaque idée', texte:'Commence chaque grande partie par une phrase qui annonce l\'idée que tu vas développer. Le lecteur suit ainsi plus facilement le fil de ta démonstration.'},
+      ]
+    },
+
+    liaison: {
+      label: 'Liaison et mise en réseau des documents',
+      conseils: [
+        {id:'ec_l1', titre:'Faire dialoguer les documents', texte:'Plutôt que de traiter les documents les uns après les autres, essaie de les mettre en relation : est-ce que le document 2 confirme, nuance ou contredit le document 1 ?'},
+        {id:'ec_l2', titre:'Utiliser davantage de mots de liaison', texte:'Les connecteurs logiques sont tes alliés : ils montrent les relations entre tes idées et rendent ta synthèse bien plus cohérente.'},
+        {id:'ec_l3', titre:'Souligner les points de convergence', texte:'Lorsque plusieurs documents partagent une même idée, le souligner renforce ton argumentation. Ces convergences donnent du poids à ta démonstration.'},
+        {id:'ec_l4', titre:'Valoriser les tensions entre documents', texte:'Les contradictions entre les documents sont précieuses : elles montrent que le sujet est complexe et que tu es capable de le saisir dans toute sa nuance.'},
+        {id:'ec_l5', titre:'Organiser par idées plutôt que par documents', texte:'Une synthèse efficace regroupe les informations par thème, pas par source. Essaie de construire tes paragraphes autour d\'une idée, illustrée par plusieurs documents.'},
+        {id:'ec_l6', titre:'Croiser les sources', texte:'Un argument étayé par plusieurs documents est bien plus solide. Essaie, pour chaque idée, de mobiliser au moins deux sources.'},
+        {id:'ec_l7', titre:'Analyser les documents non textuels', texte:'Les images, graphiques ou caricatures méritent une vraie analyse. Décris ce que tu vois, puis interprète ce que ça signifie dans le contexte du dossier.'},
+      ]
+    },
+
+    expression: {
+      label: 'Expression et qualité de la langue',
+      conseils: [
+        {id:'ec_e1', titre:'Viser des phrases courtes et précises', texte:'Des phrases courtes et bien construites sont souvent plus efficaces que de longues phrases complexes. Essaie de formuler chaque idée de la façon la plus directe possible.'},
+        {id:'ec_e2', titre:'Choisir des mots précis', texte:'Ton vocabulaire est ta force : plus tu choisiras des mots précis et adaptés au sujet, plus ton expression sera convaincante.'},
+        {id:'ec_e3', titre:'Varier le vocabulaire', texte:'Pour rendre ta production plus fluide et agréable à lire, pense à diversifier ton vocabulaire et à éviter les répétitions.'},
+        {id:'ec_e4', titre:'Enrichir ses phrases', texte:'Des adjectifs, des adverbes et un vocabulaire thématique précis permettent de porter l\'information de manière bien plus nuancée et efficace.'},
+        {id:'ec_e5', titre:'Travailler les points de grammaire récurrents', texte:'Identifie les structures qui te posent problème et travaille-les spécifiquement. Des progrès ciblés sont souvent les plus rapides.'},
+        {id:'ec_e6', titre:'Maintenir un registre soutenu', texte:'Une synthèse de Bac exige un niveau de langue soutenu et homogène. C\'est une compétence qui se développe par la lecture régulière de textes en anglais.'},
+        {id:'ec_e7', titre:'Développer davantage', texte:'Tu as des idées intéressantes — prends le temps de les développer. Pour chaque argument, un exemple tiré des documents et une interprétation enrichissent ta réflexion.'},
+        {id:'ec_e8', titre:'Sélectionner l\'essentiel', texte:'La concision est une qualité : mieux vaut quelques idées bien développées qu\'une accumulation de détails. Apprends à sélectionner les éléments les plus pertinents.'},
+        {id:'ec_e9', titre:'Veiller à la cohérence des phrases', texte:'Relis-toi à voix haute : si une phrase te semble difficile à prononcer ou à comprendre, c\'est souvent signe qu\'elle gagnerait à être reformulée.'},
+        {id:'ec_e10', titre:'Utiliser le vocabulaire du thème', texte:'Chaque thème du programme a son vocabulaire spécifique. Le maîtriser montre ta connaissance du sujet et donne de la précision à ton expression.'},
+      ]
+    },
+
+    argumentation: {
+      label: 'Qualité de l\'argumentation',
+      conseils: [
+        {id:'ec_a1', titre:'Étayer ses arguments par des détails croisés', texte:'Pour donner du poids à ton argumentation, appuie-toi sur des éléments précis tirés de plusieurs documents. C\'est ce croisement des sources qui rend une analyse convaincante.'},
+        {id:'ec_a2', titre:'Illustrer chaque idée par un exemple', texte:'Un argument sans exemple reste abstrait. Pour chaque idée, cherche un élément concret dans le dossier qui viendra l\'étayer.'},
+        {id:'ec_a3', titre:'Adopter une posture analytique', texte:'Tu restitues bien les idées des documents. L\'étape suivante est de montrer ta propre lecture critique : qu\'est-ce que ces documents te disent, au-delà de ce qu\'ils énoncent ?'},
+        {id:'ec_a4', titre:'Hiérarchiser ses idées', texte:'Toutes les idées n\'ont pas le même poids. Distinguer l\'idée principale des idées secondaires rend ton argumentation plus claire et plus structurée.'},
+        {id:'ec_a5', titre:'Dégager les enjeux culturels', texte:'Va au-delà des faits : relie tes analyses à des enjeux culturels, historiques ou sociaux. C\'est ce regard plus profond qui fait la différence dans une synthèse LLCER.'},
+      ]
+    },
+  },
+
+  // ════════════════════════════════════════════════════════
+  //  EXPRESSION ORALE
+  // ════════════════════════════════════════════════════════
+  orale: {
+
+    contenu: {
+      label: 'Contenu et argumentation',
+      conseils: [
+        {id:'or_c1', titre:'Structurer sa présentation', texte:'Un plan clair, même simple, change tout à l\'oral. Prépare 2 ou 3 idées principales dans un ordre logique, et annonce-les dès le début de ta présentation.'},
+        {id:'or_c2', titre:'Développer ses idées', texte:'Tu poses de bonnes idées — prends le temps de les développer. Pour chaque argument, un exemple concret tiré d\'un document ou de ta culture générale enrichit considérablement ta présentation.'},
+        {id:'or_c3', titre:'Parler avec naturel', texte:'L\'examinateur veut t\'entendre penser. Plutôt que de réciter un texte appris, essaie de t\'exprimer spontanément à partir de quelques mots-clés : c\'est bien plus engageant.'},
+        {id:'or_c4', titre:'Nuancer son propos', texte:'Les affirmations nuancées montrent une réelle maîtrise du sujet. Des formules comme "bien que…" ou "il faut cependant souligner que…" enrichissent ta présentation.'},
+        {id:'or_c5', titre:'Mobiliser ses références culturelles', texte:'Tes connaissances culturelles sont un vrai atout à l\'oral. Cite des événements, des œuvres ou des personnalités précises liées au thème pour ancrer ton discours.'},
+        {id:'or_c6', titre:'Gérer son temps', texte:'Prépare suffisamment de développements pour utiliser le temps imparti. Entraîne-toi avec un chronomètre pour avoir une bonne estimation de la durée de ta présentation.'},
+      ]
+    },
+
+    interaction: {
+      label: 'Interaction et réactivité',
+      conseils: [
+        {id:'or_i1', titre:'Répondre précisément aux questions', texte:'Quand une question te surprend, prends quelques secondes pour reformuler avant de répondre. C\'est une façon naturelle de montrer que tu écoutes et que tu réfléchis.'},
+        {id:'or_i2', titre:'Développer ses réponses', texte:'Après une réponse courte, ajoute systématiquement un exemple ou une explication. Cela montre que tu as vraiment réfléchi à la question.'},
+        {id:'or_i3', titre:'Prendre des initiatives dans l\'échange', texte:'L\'interaction est un moment pour montrer ta personnalité. N\'hésite pas à rebondir sur ce que dit l\'examinateur, à ajouter une nuance ou à élargir la discussion.'},
+        {id:'or_i4', titre:'Gérer les questions imprévues avec sérénité', texte:'Face à une question difficile, garde ton calme et mobilise ce que tu sais. Une réponse incomplète mais construite vaut mieux qu\'un silence.'},
+        {id:'or_i5', titre:'Montrer que tu écoutes', texte:'L\'interaction est un échange : montrer que tu écoutes et que tu tiens compte de ce qui est dit valorise beaucoup ta prestation orale.'},
+      ]
+    },
+
+    langue: {
+      label: 'Qualité de la langue orale',
+      conseils: [
+        {id:'or_l1', titre:'Prendre le temps de s\'exprimer', texte:'Parler à un rythme posé te permet d\'articuler clairement et de mieux structurer ta pensée. Les pauses font partie du discours — elles ne sont pas un signe de faiblesse.'},
+        {id:'or_l2', titre:'Fluidifier son expression', texte:'L\'hésitation est naturelle — l\'entraînement régulier à l\'oral est le meilleur moyen de la réduire progressivement. Des formules de transition peuvent combler les pauses de façon naturelle.'},
+        {id:'or_l3', titre:'Travailler l\'intonation', texte:'L\'intonation permet de mettre en valeur tes idées importantes et de rendre ton discours plus vivant. Enregistre-toi pour mieux percevoir ton rythme et tes modulations.'},
+        {id:'or_l4', titre:'Enrichir son vocabulaire oral', texte:'Entraîne-toi à utiliser à l\'oral le vocabulaire thématique du programme. Plus tu le mobilises, plus il deviendra naturel dans ta prise de parole.'},
+        {id:'or_l5', titre:'Soigner sa prononciation', texte:'T\'enregistrer et te réécouter est l\'un des meilleurs outils pour identifier et corriger progressivement les sons qui te posent problème.'},
+        {id:'or_l6', titre:'S\'appuyer sur quelques mots-clés', texte:'À l\'oral, quelques mots-clés suffisent pour guider ta présentation. Entraîne-toi à parler de façon fluide à partir d\'un plan allégé plutôt que de notes complètes.'},
+      ]
+    },
+  },
+
+  // ════════════════════════════════════════════════════════
+  //  TRADUCTION (VERSION)
+  // ════════════════════════════════════════════════════════
+  traduction: {
+
+    fidelite: {
+      label: 'Fidélité au sens',
+      conseils: [
+        {id:'tr_f1', titre:'Saisir le sens global avant de traduire', texte:'Lis l\'intégralité du passage avant de commencer à traduire. Comprendre le sens global t\'aide à faire les bons choix au moment de restituer chaque phrase.'},
+        {id:'tr_f2', titre:'Vérifier la fidélité du sens', texte:'Compare ta traduction avec l\'original phrase par phrase pour t\'assurer que le sens est bien restitué dans son intégralité.'},
+        {id:'tr_f3', titre:'Restituer toutes les informations', texte:'Veille à ce que chaque unité de sens du texte original se retrouve dans ta traduction. Un tableau de correspondance peut t\'aider à ne rien oublier.'},
+        {id:'tr_f4', titre:'Rendre les nuances du texte', texte:'Au-delà du sens général, essaie de rendre les nuances : le doute, l\'ironie, l\'insistance. C\'est ce soin du détail qui caractérise une traduction réussie.'},
+        {id:'tr_f5', titre:'Repérer les faux-amis', texte:'Certains mots anglais ressemblent à des mots français mais n\'ont pas le même sens. En cas de doute, prends le temps de vérifier : c\'est un réflexe qui évite bien des erreurs.'},
+      ]
+    },
+
+    langue: {
+      label: 'Qualité du français',
+      conseils: [
+        {id:'tr_l1', titre:'Rechercher la formulation naturelle en français', texte:'Une bonne traduction donne l\'impression d\'avoir été écrite directement en français. Demande-toi toujours : "Comment dirait-on cette idée naturellement dans notre langue ?"'},
+        {id:'tr_l2', titre:'Tester sa traduction à l\'oreille', texte:'Relis ta traduction à voix haute en oubliant le texte anglais. Si une phrase te semble lourde ou artificielle, c\'est souvent signe qu\'elle gagnerait à être reformulée.'},
+        {id:'tr_l3', titre:'Respecter le registre du texte original', texte:'Le niveau de langue de ta traduction doit être cohérent avec celui du texte source. Un texte soutenu mérite une traduction tout aussi soignée.'},
+        {id:'tr_l4', titre:'Chercher l\'équivalent idiomatique', texte:'Certaines expressions anglaises ont un équivalent naturel en français qu\'une traduction mot à mot ne peut pas rendre. Cherche la formulation qui sonne juste dans notre langue.'},
+        {id:'tr_l5', titre:'Soigner la ponctuation française', texte:'La ponctuation française a ses propres conventions. Les maîtriser est une marque de soin dans ta traduction et un signe de maîtrise du français écrit.'},
+        {id:'tr_l6', titre:'Varier les structures de phrases', texte:'Une traduction réussie montre ta maîtrise du français, notamment à travers la variété de tes constructions syntaxiques. Ose restructurer, inverser, condenser.'},
+      ]
+    },
+  },
+
+  // ════════════════════════════════════════════════════════
+  //  TRANSPOSITION
+  // ════════════════════════════════════════════════════════
+  transposition: {
+
+    reformulation: {
+      label: 'Reformulation et prise de distance',
+      conseils: [
+        {id:'tp_r1', titre:'Reformuler avec ses propres mots', texte:'La transposition est un exercice de reformulation, pas de traduction. Lis le passage, puis réécris l\'idée en français sans regarder le texte source.'},
+        {id:'tp_r2', titre:'Prendre de la distance avec le texte original', texte:'Ton compte-rendu gagnera à se lire comme un texte français autonome. N\'hésite pas à réorganiser les idées et à restructurer les phrases pour qu\'elles sonnent naturellement en français.'},
+        {id:'tp_r3', titre:'Exprimer les idées dans ses propres termes', texte:'La transposition exige une vraie reformulation. Essaie de t\'approprier le contenu du texte pour le restituer dans une langue vraiment française.'},
+        {id:'tp_r4', titre:'Utiliser les marqueurs de médiation', texte:'Des formules comme "selon l\'auteur", "l\'article avance que" ou "le texte suggère" montrent que tu distingues bien les faits des opinions — c\'est une compétence très valorisée.'},
+        {id:'tp_r5', titre:'Rendre le ton de l\'auteur', texte:'L\'auteur a une intention, une façon de présenter les choses. Essaie de la restituer dans ta transposition : est-il enthousiaste, critique, prudent ?'},
+      ]
+    },
+
+    selection: {
+      label: 'Sélection et hiérarchie des idées',
+      conseils: [
+        {id:'tp_s1', titre:'Aller à l\'essentiel', texte:'Une transposition efficace va droit au but. Identifie la thèse principale et les 2 ou 3 arguments clés du texte, et centre ta rédaction sur eux.'},
+        {id:'tp_s2', titre:'Viser la bonne longueur', texte:'La transposition représente environ un tiers du texte source. Sélectionne l\'essentiel plutôt que de tout retranscrire.'},
+        {id:'tp_s3', titre:'Vérifier que les idées clés sont présentes', texte:'Avant de rendre ta copie, relis le texte original et vérifie que les idées incontournables figurent bien dans ta transposition.'},
+        {id:'tp_s4', titre:'Hiérarchiser les informations', texte:'Toutes les informations n\'ont pas le même poids. Distinguer les idées principales des détails illustratifs te permet de mieux organiser ta transposition.'},
+        {id:'tp_s5', titre:'Structurer sa transposition', texte:'Même courte, une transposition doit être organisée : une phrase d\'introduction pour présenter le texte, un développement articulé, et une phrase de conclusion.'},
+      ]
+    },
+
+    langue: {
+      label: 'Qualité du français',
+      conseils: [
+        {id:'tp_l1', titre:'Viser un français fluide et naturel', texte:'Relis ta transposition comme si tu n\'avais jamais lu le texte anglais. Est-ce que ça se lit facilement ? C\'est l\'objectif à atteindre.'},
+        {id:'tp_l2', titre:'Maintenir un registre soutenu et neutre', texte:'Un français soutenu et neutre est attendu pour cet exercice. La lecture régulière de textes en français est le meilleur entraînement pour y parvenir.'},
+        {id:'tp_l3', titre:'Privilégier des phrases claires et concises', texte:'Des phrases courtes et bien construites sont souvent plus lisibles que de longues constructions complexes. Une idée par phrase, c\'est un bon repère.'},
+        {id:'tp_l4', titre:'Articuler ses idées', texte:'Des connecteurs logiques en français permettent de montrer clairement les liens entre les informations et de rendre ta transposition bien plus cohérente.'},
+        {id:'tp_l5', titre:'Soigner l\'entrée en matière', texte:'Commence ta transposition par une phrase sobre qui présente la nature du document, sa source et son thème. C\'est une façon simple et efficace de cadrer le propos.'},
+      ]
+    },
+  },
+};
+// ─── ÉTAT DES CONSEILS SÉLECTIONNÉS ──────────────────────────────────────────
+let conseilsSelectionnes = {};
+
+function ouvrirPanneauConseils(eleveId, devoirId){
+  corrCtx={eleveId, devoirId};
+  const s=students.find(x=>x.id===eleveId);
+  const d=devoirs.find(x=>x.id===devoirId);
+  const p=s?.productions.find(x=>x.devoirId===devoirId);
+  if(!s||!d||!p){showToast('Correction non trouvée','#9b1c1c');return;}
+  const key=`${devoirId}_${eleveId}`;
+  if(!conseilsSelectionnes[key]) conseilsSelectionnes[key]={};
+  const sel=conseilsSelectionnes[key];
+  let html='';
+  d.types.forEach(type=>{
+    const pc=PCOL[type];
+    const typeCibles=CONSEILS_CIBLES[type];
+    if(!typeCibles)return;
+    html+=`<div style="border-left:4px solid ${pc.bd};background:${pc.bg};padding:12px 16px;margin-bottom:14px;border-radius:0 8px 8px 0">
+      <div style="font-size:13px;font-weight:700;color:${pc.t};margin-bottom:10px">${pc.label}</div>`;
+    Object.values(typeCibles).forEach(point=>{
+      html+=`<div style="margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:${pc.t};margin-bottom:6px">${point.label}</div>`;
+      point.conseils.forEach(c=>{
+        const cKey=c.id;
+        if(sel[cKey]===undefined) sel[cKey]=false;
+        const checked=sel[cKey];
+        html+=`<label style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#fff;border-radius:6px;border:1px solid ${checked?pc.bd:'#e0e3e4'};margin-bottom:5px;cursor:pointer">
+          <input type="checkbox" ${checked?'checked':''} data-key="${cKey}"
+            onchange="toggleConseil('${key}','${cKey}',this.checked,this)"
+            style="margin-top:3px;accent-color:${pc.t};flex-shrink:0;width:15px;height:15px">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#2c2f30;margin-bottom:2px">${c.titre}</div>
+            <div style="font-size:11px;color:#595c5d;line-height:1.5">${genrerBilan(c.texte, s.genre||'F')}</div>
+          </div>
+        </label>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('panneau-conseils-body').innerHTML=html;
+  document.getElementById('panneau-conseils-titre').textContent=`Conseils pour ${s.name} — ${d.titre}`;
+  document.getElementById('panneau-conseils').classList.add('open');
+}
+
+function toggleConseil(key,cKey,checked,input){
+  if(!conseilsSelectionnes[key]) conseilsSelectionnes[key]={};
+  conseilsSelectionnes[key][cKey]=checked;
+  const label=input.closest('label');
+  if(!label)return;
+  const type=cKey.startsWith('ec_')?'ecrite':cKey.startsWith('or_')?'orale':cKey.startsWith('tr_')?'traduction':'transposition';
+  const pc=PCOL[type]||PCOL.ecrite;
+  label.style.borderColor=checked?pc.bd:'#e0e3e4';
+}
+
+function sauvegarderConseils(){
+  const s=students.find(x=>x.id===corrCtx.eleveId);
+  const p=s?.productions.find(x=>x.devoirId===corrCtx.devoirId);
+  if(!p)return;
+  const key=`${corrCtx.devoirId}_${corrCtx.eleveId}`;
+  p.conseilsSelectionnes={...conseilsSelectionnes[key]};
+  document.getElementById('panneau-conseils').classList.remove('open');
+  saveData();
+  showToast('Conseils enregistrés','#1a5c2e');
+}
+
+function getConseilsTextes(type, sel){
+  const typeCibles=CONSEILS_CIBLES[type];
+  if(!typeCibles||!sel)return[];
+  const textes=[];
+  Object.values(typeCibles).forEach(point=>{
+    point.conseils.forEach(c=>{
+      if(sel[c.id]) textes.push({titre:c.titre,texte:c.texte});
+    });
+  });
+  return textes;
+}
+
+// Accorde les bilans selon le genre de l'élève
+function genrerBilan(texte, genre){
+  if(!texte)return texte;
+  const f=genre==='F';
+  return texte
+    .replace(/\btu es précis\b/g, f?'tu es précise':'tu es précis')
+    .replace(/\btu es attentif\b/g, f?'tu es attentive':'tu es attentif')
+    .replace(/\btu es minutieux\b/g, f?'tu es minutieuse':'tu es minutieux')
+    .replace(/\bSois plus précis\b/g, f?'Sois plus précise':'Sois plus précis')
+    .replace(/\bSois précis\b/g, f?'Sois précise':'Sois précis')
+    .replace(/\bplus rigoureux\b/g, f?'plus rigoureuse':'plus rigoureux')
+    .replace(/\bsois rigoureux\b/g, f?'sois rigoureuse':'sois rigoureux')
+    .replace(/\bplus attentif\b/g, f?'plus attentive':'plus attentif')
+    .replace(/\bSois attentif\b/g, f?'Sois attentive':'Sois attentif')
+    .replace(/\bplus minutieux\b/g, f?'plus minutieuse':'plus minutieux')
+    .replace(/\bcapable\b/g,'capable')
+    .replace(/\bconvaincu\b/g, f?'convaincue':'convaincu')
+    .replace(/\bappliqué\b/g, f?'appliquée':'appliqué')
+    .replace(/\bimpliqué\b/g, f?'impliquée':'impliqué')
+    .replace(/\btu es concerné\b/g, f?'tu es concernée':'tu es concerné');
+}
+
+
+function printDevoir(eleveId, devoirId){
+  const s=students.find(x=>x.id===eleveId);if(!s)return;
+  const d=devoirs.find(x=>x.id===devoirId);if(!d)return;
+  const p=s.productions.find(x=>x.devoirId===devoirId);if(!p){showToast('Aucune correction enregistrée pour ce devoir','#9b1c1c');return;}
+  const dateStr=d.date?new Date(d.date).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';
+  const isCombo=d.types.length===2;
+  const genre=s.genre||'F';
+  const sel=(p.conseilsSelectionnes)||{};
+
+  // Construire le HTML de chaque épreuve avec grille + descripteurs + conseils ciblés
+  let epHtml='';
+  d.types.forEach((type,epIdx)=>{
+    const g=G[type];const pc=PCOL[type];
+    const borderColor=pc.bd;
+    const breakClass=isCombo&&epIdx===1?'epreuve-break':'epreuve-section';
+    const conseilsCibles=getConseilsTextes(type,sel);
+    const hasCibles=conseilsCibles.length>0;
+    // Fallback : conseils génériques si aucun sélectionné
+    const conseils=CONSEILS_DEVOIR[type];
+
+    if(g.isTrad){
+      const level=p.criteres?.[`${type}_level`]||'—';
+      const score10=p.criteres?.[`${type}_score10`]||'—';
+      const note4=p.criteres?.[`${type}_note`]||'—';
+      const desc=p.criteres?.[`${type}_desc`]||'';
+      const cl=LC[level]||{};
+      const niveauConseils=conseils?.par_niveau?.[level];
+      const conseilsHtmlTrad=hasCibles
+        ?conseilsCibles.map(c=>`<li style="margin-bottom:8px;line-height:1.6"><b style="display:block;margin-bottom:2px">${c.titre}</b>${c.texte}</li>`).join('')
+        :(niveauConseils?.conseils||[]).map(c=>`<li style="margin-bottom:6px;line-height:1.5">${c}</li>`).join('');
+      epHtml+=`
+        <div class="${breakClass}" style="border-left:5px solid ${borderColor};background:${pc.bg};padding:14px 18px;margin:16px 0;border-radius:0 8px 8px 0">
+          <h3 style="font-size:15px;font-weight:700;color:${pc.t};margin:0 0 10px">${pc.label}</h3>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:12px">
+            <tr style="background:rgba(0,0,0,.05)">
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Niveau constaté</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Score /10</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Note /4</th>
+            </tr>
+            <tr>
+              <td style="padding:8px 10px;font-size:14px;font-weight:700;color:${cl.t||'#333'}">${level}</td>
+              <td style="padding:8px 10px;font-size:14px">${score10}/10</td>
+              <td style="padding:8px 10px;font-size:14px;font-weight:700">${note4}/4</td>
+            </tr>
+          </table>
+          ${desc?`<div style="background:#fff;border:1px solid ${borderColor};border-radius:6px;padding:10px 14px;margin-bottom:12px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${pc.t};margin-bottom:5px">Ce que dit la grille officielle — ${level}</div>
+            <div style="font-size:12px;color:#333;font-style:italic;line-height:1.6">${desc}</div>
+          </div>`:''}
+          <div style="background:#fff;border:1px solid ${borderColor};border-radius:6px;padding:10px 14px">
+            ${niveauConseils?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${pc.t};margin-bottom:6px">Ce que ça veut dire pour toi</div>
+            <div style="font-size:12px;color:#333;margin-bottom:10px">${genrerBilan(niveauConseils.bilan,genre)}</div>`:''}
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${pc.t};margin-bottom:6px">Pour progresser</div>
+            <ul style="margin:0;padding-left:1.2rem;font-size:12px;color:#333">${conseilsHtmlTrad||'<li>Continue à pratiquer régulièrement.</li>'}</ul>
+          </div>
+        </div>`;
+    } else {
+      const critRows=(g.criteres||[]).map(c=>{
+        const lv=p.criteres?.[`${type}_${c.id}`]||'—';
+        const pts=lv!=='—'?c.scores[lv]||0:0;
+        const desc=p.criteres?.[`${type}_${c.id}_desc`]||'';
+        const cl=LC[lv]||{};
+        return`<tr>
+          <td style="padding:6px 10px;font-size:12px;color:#444;border-bottom:1px solid #eee;width:28%">${c.name}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid #eee;width:10%"><span style="font-size:13px;font-weight:700;color:${cl.t||'#333'};background:${cl.bg||'#f5f5f5'};padding:2px 8px;border-radius:6px">${lv}</span></td>
+          <td style="padding:6px 10px;font-size:11px;color:#666;border-bottom:1px solid #eee;width:8%">${pts} pts</td>
+          <td style="padding:6px 10px;font-size:11px;color:#555;border-bottom:1px solid #eee;font-style:italic;line-height:1.5">${desc}</td>
+        </tr>`;}).join('');
+      const total=(g.criteres||[]).reduce((a,c)=>a+(c.scores[p.criteres?.[`${type}_${c.id}`]]||0),0);
+      const row=CONV_TABLE_20.find(r=>total>=r.min&&total<=r.max);
+      const noteChoisie=p.criteres?.[`${type}_note`];
+      const note16=isCombo&&noteChoisie!=null?Math.round(noteChoisie*4/5*100)/100:null;
+      const niveaux=(g.criteres||[]).map(c=>p.criteres?.[`${type}_${c.id}`]).filter(Boolean);
+      const niveauDom=niveaux.length?LEVELS[Math.round(niveaux.map(l=>LI[l]||0).reduce((a,b)=>a+b,0)/niveaux.length)]:'B1';
+      const niveauConseils=conseils?.par_niveau?.[niveauDom];
+      const conseilsHtmlEcrit=hasCibles
+        ?conseilsCibles.map(c=>`<li style="margin-bottom:8px;line-height:1.6"><b style="display:block;margin-bottom:2px">${c.titre}</b>${c.texte}</li>`).join('')
+        :(niveauConseils?.conseils||[]).map(c=>`<li style="margin-bottom:6px;line-height:1.5">${c}</li>`).join('');
+      epHtml+=`
+        <div class="${breakClass}" style="border-left:5px solid ${borderColor};background:${pc.bg};padding:14px 18px;margin:16px 0;border-radius:0 8px 8px 0">
+          <h3 style="font-size:15px;font-weight:700;color:${pc.t};margin:0 0 6px">${pc.label}</h3>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:10px;background:#fff;border-radius:6px;overflow:hidden;border:1px solid ${borderColor}">
+            <thead><tr style="background:rgba(0,0,0,.05)">
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Critère</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Niveau</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Pts</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#555">Ce que dit la grille officielle</th>
+            </tr></thead>
+            <tbody>${critRows}</tbody>
+          </table>
+          <div style="font-size:12px;color:#333;margin-bottom:12px">
+            Total : <b>${total} pts</b>
+            ${row?` → Plage : <b style="color:#0058b9">${row.noteMin}–${row.noteMax}/20</b> (${row.label})`:''}
+            ${noteChoisie!=null?` | Ta note : <b>${noteChoisie}/20</b>`:''}
+            ${note16!=null?` → <b>${note16}/16</b> (couplé avec ${PCOL[d.types.find(t=>G[t].isTrad)]?.label||''})`:''}
+          </div>
+          <div style="background:#fff;border:1px solid ${borderColor};border-radius:6px;padding:10px 14px">
+            ${niveauConseils?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${pc.t};margin-bottom:6px">Ce que ça veut dire pour toi — niveau ${niveauDom}</div>
+            <div style="font-size:12px;color:#333;margin-bottom:10px">${genrerBilan(niveauConseils.bilan,genre)}</div>`:''}
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${pc.t};margin-bottom:6px">Pour progresser</div>
+            <ul style="margin:0;padding-left:1.2rem;font-size:12px;color:#333">${conseilsHtmlEcrit||'<li>Continue à pratiquer régulièrement.</li>'}</ul>
+          </div>
+        </div>`;
+    }
+  });
+
+  // Note finale
+  const noteFinale=p.noteFinaleSur20;
+  const ck=isCombo?comboKey(d.types):null;
+  const combo=ck?COMBOS[ck]:null;
+  let noteHtml='';
+  if(noteFinale!=null){
+    if(isCombo&&combo){
+      const mainType=d.types.find(t=>!G[t].isTrad);
+      const secType=d.types.find(t=>G[t].isTrad);
+      const n20=p.criteres?.[`${mainType}_note`];
+      const n4=p.criteres?.[`${secType}_note`];
+      const n16=n20!=null?Math.round(n20*4/5*100)/100:null;
+      noteHtml=`<div style="background:#1a5c2e;color:#fff;border-radius:10px;padding:14px 20px;margin:20px 0;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;opacity:.8;margin-bottom:4px">${combo.label}</div>
+          <div style="font-size:11px;opacity:.7">${n20!=null?n20+'/20 × 4 ÷ 5 = '+n16+'/16':''} ${n4!=null?'+ '+n4+'/4':''} = ${noteFinale}/20</div>
+        </div>
+        <div style="font-size:30px;font-weight:700">${noteFinale}<span style="font-size:16px;opacity:.8">/20</span></div>
+      </div>`;
+    } else {
+      noteHtml=`<div style="background:#1a5c2e;color:#fff;border-radius:10px;padding:14px 20px;margin:20px 0;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:13px">Note finale</div>
+        <div style="font-size:30px;font-weight:700">${noteFinale}<span style="font-size:16px;opacity:.8">/${G[d.types[0]].noteMax}</span></div>
+      </div>`;
+    }
+  }
+
+  const nomFichier=`bilan-${s.name.replace(/\s+/g,'-')}-${d.titre.replace(/\s+/g,'-')}.html`;
+  const htmlContent=`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<title>Bilan ${s.name} — ${d.titre}</title>
+<style>
+  body{font-family:Arial,sans-serif;padding:1.5rem 2rem;font-size:12.5px;line-height:1.6;color:#2c2f30;max-width:800px;margin:0 auto}
+  h1{font-size:18px;font-weight:700;margin:0 0 4px}
+  h2{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#777;margin:1.25rem 0 .4rem;padding-bottom:4px;border-bottom:1px solid #eee}
+  .print-btn{margin-bottom:1.5rem;padding:8px 18px;cursor:pointer;font-size:13px;border-radius:6px;border:none;background:#0058b9;color:#fff}
+  .epreuve-section{page-break-inside:avoid;page-break-after:avoid;}
+  .epreuve-break{page-break-before:always;padding-top:0;}
+  @media print{.print-btn{display:none}body{padding:.75rem 1rem;font-size:11.5px}}
+</style></head><body>
+<button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+<h1>${s.name} — ${d.titre}</h1>
+<p style="font-size:12px;color:#777;margin:0 0 1rem">${dateStr}${combo?' · '+combo.label:''}</p>
+${noteHtml}
+${p.commentaire?`<div style="background:#fffde7;border-left:4px solid #ffe57a;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:16px">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5a4800;margin-bottom:4px">Le commentaire de ton professeur</div>
+  <div style="font-size:12px;color:#333">${p.commentaire}</div>
+</div>`:''}
+<h2>Tes résultats par épreuve et conseils pour progresser</h2>
+${epHtml}
+<p style="margin-top:2rem;font-size:10px;color:#bbb;border-top:1px solid #eee;padding-top:8px">Grilles officielles MEN — LLCER AMC Terminale</p>
+</body></html>`;
+
+  const blob=new Blob([htmlContent],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=nomFichier;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+  showToast('PDF élève téléchargé');
+}
+
+function showToast(msg,color){const t=document.getElementById('toast');t.textContent=msg;t.style.background=color||'#2c2f30';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+/* ── LOCALSTORAGE ── */
+const LS_KEY='lumenEdData_v1';
+
+// ─── ENREGISTREUR AUDIO ───────────────────────────────────────────────────────
+const audioState={}; // par eleveId : {mediaRecorder, chunks, stream, timerInterval, seconds, paused, blob}
+
+function audioStartRec(eleveId){
+  const st=audioState[eleveId];
+  if(st&&st.mediaRecorder&&st.mediaRecorder.state==='recording') return;
+  if(st&&st.mediaRecorder&&st.mediaRecorder.state==='paused'){
+    st.mediaRecorder.resume();
+    st.paused=false;
+    _audioTimerStart(eleveId);
+    _audioWaveStart(eleveId);
+    const btnRec=document.getElementById(`btn-rec-${eleveId}`);
+    const btnPause=document.getElementById(`btn-pause-${eleveId}`);
+    if(btnRec){btnRec.classList.add('recording');btnRec.disabled=true;btnRec.innerHTML='<span class="rec-dot"></span> Enregistrer';}
+    if(btnPause) btnPause.classList.remove('paused');
+    _audioSetStatus(eleveId,'Enregistrement en cours…');
+    return;
+  }
+  // Nouveau départ via getUserMedia
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    const mimeType=MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
+    const mr=new MediaRecorder(stream,{mimeType});
+    audioState[eleveId]={mediaRecorder:mr,chunks:[],stream,timerInterval:null,seconds:0,paused:false,blob:null};
+    mr.ondataavailable=function(e){if(e.data.size>0) audioState[eleveId].chunks.push(e.data);};
+    mr.onstop=function(){_audioFinalize(eleveId);};
+    mr.start(200);
+    _audioTimerStart(eleveId);
+    _audioWaveStart(eleveId);
+    const btnRec=document.getElementById(`btn-rec-${eleveId}`);
+    const btnPause=document.getElementById(`btn-pause-${eleveId}`);
+    const btnStop=document.getElementById(`btn-stop-${eleveId}`);
+    const player=document.getElementById(`audio-player-${eleveId}`);
+    if(btnRec){btnRec.classList.add('recording');btnRec.disabled=true;}
+    if(btnPause) btnPause.disabled=false;
+    if(btnStop) btnStop.disabled=false;
+    if(player) player.style.display='none';
+    _audioSetStatus(eleveId,'Enregistrement en cours…');
+  }).catch(function(err){
+    _audioSetStatus(eleveId,'⚠ Microphone inaccessible — utilise le lanceur local ou Firefox.');
+    console.warn('Audio error:',err);
+  });
+}
+
+function audioPause(eleveId){
+  const st=audioState[eleveId];if(!st?.mediaRecorder)return;
+  if(st.mediaRecorder.state==='recording'){
+    st.mediaRecorder.pause();
+    st.paused=true;
+    clearInterval(st.timerInterval);
+    _audioWaveStop(eleveId);
+    const btnRec=document.getElementById(`btn-rec-${eleveId}`);
+    const btnPause=document.getElementById(`btn-pause-${eleveId}`);
+    if(btnRec){btnRec.classList.remove('recording');btnRec.disabled=false;btnRec.innerHTML='<span class="rec-dot"></span> Reprendre';}
+    if(btnPause) btnPause.classList.add('paused');
+    _audioSetStatus(eleveId,'En pause — clique sur Reprendre pour continuer.');
+  } else if(st.mediaRecorder.state==='paused'){
+    // Reprendre via le bouton pause aussi
+    audioStartRec(eleveId);
+  }
+}
+
+function audioStop(eleveId){
+  const st=audioState[eleveId];if(!st?.mediaRecorder)return;
+  clearInterval(st.timerInterval);
+  _audioWaveStop(eleveId);
+  st.mediaRecorder.stop();
+  st.stream.getTracks().forEach(t=>t.stop());
+  const btnRec=document.getElementById(`btn-rec-${eleveId}`);
+  const btnPause=document.getElementById(`btn-pause-${eleveId}`);
+  const btnStop=document.getElementById(`btn-stop-${eleveId}`);
+  if(btnRec){btnRec.classList.remove('recording');btnRec.disabled=true;btnRec.innerHTML='<span class="rec-dot"></span> Enregistrer';}
+  if(btnPause){btnPause.disabled=true;btnPause.classList.remove('paused');}
+  if(btnStop) btnStop.disabled=true;
+  _audioSetStatus(eleveId,'Traitement…');
+}
+
+function _audioFinalize(eleveId){
+  const st=audioState[eleveId];if(!st)return;
+  const mime=st.chunks[0]?.type||'audio/webm';
+  const blob=new Blob(st.chunks,{type:mime});
+  st.blob=blob;
+  const url=URL.createObjectURL(blob);
+  const player=document.getElementById(`audio-player-${eleveId}`);
+  const audioEl=document.getElementById(`audio-el-${eleveId}`);
+  if(audioEl) audioEl.src=url;
+  if(player) player.style.display='block';
+  const dur=_audioFormatTime(st.seconds);
+  _audioSetStatus(eleveId,`Durée : ${dur} — Écoute et télécharge ci-dessous.`);
+}
+
+function audioDownload(eleveId,nomEleve){
+  const st=audioState[eleveId];
+  if(!st?.blob){showToast('Aucun enregistrement disponible','#9b1c1c');return;}
+  const ext=st.blob.type.includes('ogg')?'ogg':'webm';
+  const nom=`commentaire-${nomEleve.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.${ext}`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(st.blob);
+  a.download=nom;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>document.body.removeChild(a),500);
+  showToast('Audio téléchargé','#1a5c2e');
+}
+
+function audioReset(eleveId){
+  const st=audioState[eleveId];
+  if(st){
+    clearInterval(st?.timerInterval);
+    st?.stream?.getTracks().forEach(t=>t.stop());
+    delete audioState[eleveId];
+  }
+  const btnRec=document.getElementById(`btn-rec-${eleveId}`);
+  const btnPause=document.getElementById(`btn-pause-${eleveId}`);
+  const btnStop=document.getElementById(`btn-stop-${eleveId}`);
+  const player=document.getElementById(`audio-player-${eleveId}`);
+  const timer=document.getElementById(`audio-timer-${eleveId}`);
+  if(btnRec){btnRec.disabled=false;btnRec.classList.remove('recording');btnRec.innerHTML='<span class="rec-dot"></span> Enregistrer';}
+  if(btnPause){btnPause.disabled=true;btnPause.classList.remove('paused');}
+  if(btnStop) btnStop.disabled=true;
+  if(player) player.style.display='none';
+  if(timer) timer.textContent='0:00';
+  _audioWaveReset(eleveId);
+  _audioSetStatus(eleveId,'');
+}
+
+function audioImport(event, eleveId, nomEleve){
+  const file=event.target.files[0];
+  if(!file)return;
+  // Stocker le blob importé dans audioState
+  if(!audioState[eleveId]) audioState[eleveId]={blob:null,chunks:[],seconds:0};
+  audioState[eleveId].blob=file;
+  audioState[eleveId].importedName=file.name;
+  const url=URL.createObjectURL(file);
+  const player=document.getElementById(`audio-player-${eleveId}`);
+  const audioEl=document.getElementById(`audio-el-${eleveId}`);
+  if(audioEl) audioEl.src=url;
+  if(player) player.style.display='block';
+  _audioSetStatus(eleveId,`Fichier importé : ${file.name} — Écoute et télécharge ci-dessous avec le nom de l'élève.`);
+  event.target.value='';
+}
+
+function _audioTimerStart(eleveId){
+  const st=audioState[eleveId];if(!st)return;
+  clearInterval(st.timerInterval);
+  st.timerInterval=setInterval(()=>{
+    st.seconds++;
+    const el=document.getElementById(`audio-timer-${eleveId}`);
+    if(el) el.textContent=_audioFormatTime(st.seconds);
+  },1000);
+}
+
+function _audioFormatTime(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
+function _audioSetStatus(eleveId,msg){const el=document.getElementById(`audio-status-${eleveId}`);if(el)el.textContent=msg;}
+
+// Animation des barres sonores
+const _audioWaveIntervals={};
+function _audioWaveStart(eleveId){
+  const container=document.getElementById(`audio-wave-${eleveId}`);
+  if(!container)return;
+  const bars=container.querySelectorAll('.wave-bar');
+  _audioWaveIntervals[eleveId]=setInterval(()=>{
+    bars.forEach(b=>{
+      const h=Math.floor(Math.random()*28)+4;
+      b.style.height=h+'px';
+      b.classList.add('active');
+    });
+  },80);
+}
+function _audioWaveStop(eleveId){
+  clearInterval(_audioWaveIntervals[eleveId]);
+  const container=document.getElementById(`audio-wave-${eleveId}`);
+  if(!container)return;
+  container.querySelectorAll('.wave-bar').forEach(b=>{b.style.height='4px';b.classList.remove('active');});
+}
+function _audioWaveReset(eleveId){_audioWaveStop(eleveId);}
+
+// ─── QR CODE & PARTAGE ────────────────────────────────────────────────────────
+function ouvrirQR(eleveId, devoirId){
+  const s=students.find(x=>x.id===eleveId);
+  const d=devoirs.find(x=>x.id===devoirId);
+  const p=s?.productions.find(x=>x.devoirId===devoirId);
+  if(!s||!d||!p){showToast('Correction introuvable','#c0392b');return;}
+
+  // Construire le payload compact
+  const payload={
+    v:1, // version
+    n:s.name,
+    g:s.genre||'F',
+    dt:d.titre,
+    dd:d.date||'',
+    ty:d.types,
+    cr:p.criteres||{},
+    cm:p.commentaire||'',
+    nf:p.noteFinaleSur20,
+    cs:p.conseilsSelectionnes||{}
+  };
+  const json=JSON.stringify(payload);
+  const b64=btoa(unescape(encodeURIComponent(json)));
+
+  // URL = page actuelle + hash
+  const base=window.location.href.split('#')[0];
+  const url=`${base}#bilan=${b64}`;
+
+  // Afficher dans la modale
+  document.getElementById('qr-nom-eleve').textContent=`${s.name} — ${d.titre}`;
+  document.getElementById('qr-url').value=url;
+
+  // Générer le QR code
+  const container=document.getElementById('qr-canvas');
+  container.innerHTML='';
+  if(window.QRCode){
+    new QRCode(container,{text:url,width:200,height:200,colorDark:'#1a1a2e',colorLight:'#f5f0e8',correctLevel:QRCode.CorrectLevel.M});
+  } else {
+    container.innerHTML='<div style="width:200px;height:200px;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)">Chargement QR…</div>';
+    const script=document.createElement('script');
+    script.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.onload=()=>{
+      container.innerHTML='';
+      new QRCode(container,{text:url,width:200,height:200,colorDark:'#1a1a2e',colorLight:'#f5f0e8',correctLevel:QRCode.CorrectLevel.M});
+    };
+    document.head.appendChild(script);
+  }
+
+  openModal('modal-qr');
+}
+
+function copierLienQR(){
+  const url=document.getElementById('qr-url').value;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn=document.getElementById('btn-copier-qr');
+    btn.textContent='✓ Copié !';
+    btn.style.background='#f0fff4';
+    btn.style.borderColor='var(--c1-bd)';
+    btn.style.color='var(--c1)';
+    setTimeout(()=>{btn.textContent='Copier';btn.style.background='';btn.style.borderColor='';btn.style.color='';},2000);
+  });
+}
+
+function imprimerQR(){
+  const url=document.getElementById('qr-url').value;
+  const nom=document.getElementById('qr-nom-eleve').textContent;
+  const canvas=document.getElementById('qr-canvas').querySelector('canvas');
+  const imgSrc=canvas?canvas.toDataURL():'';
+  const w=window.open('','_blank','width=500,height:700');
+  w.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>QR – ${nom}</title>
+<style>
+  body{font-family:'DM Sans',system-ui,sans-serif;background:#f5f0e8;color:#1a1a2e;padding:3rem;text-align:center;}
+  h1{font-family:Georgia,serif;font-size:1.4rem;font-weight:700;margin-bottom:.5rem;}
+  p{font-size:13px;color:#6b6b7a;margin-bottom:1.5rem;}
+  img{width:220px;height:220px;border:3px solid #1a1a2e;border-radius:8px;margin-bottom:1.5rem;display:block;margin-left:auto;margin-right:auto;}
+  .url{font-size:10px;color:#6b6b7a;word-break:break-all;max-width:380px;margin:0 auto;padding:8px;background:#fff;border-radius:6px;border:1px solid #e0d9cc;}
+  .instructions{margin-top:1.5rem;font-size:12px;color:#6b6b7a;border-top:1px solid #e0d9cc;padding-top:1.25rem;}
+  @media print{body{padding:2rem}}
+</style></head><body>
+<h1>${nom}</h1>
+<p>Scanne ce QR code pour accéder à ton bilan de correction</p>
+${imgSrc?`<img src="${imgSrc}" alt="QR Code" />`:''}
+<div class="url">${url}</div>
+<div class="instructions">📱 Ouvre l'appareil photo → pointe vers le QR code → clique sur le lien</div>
+<script>window.onload=()=>window.print()<\/script>
+</body></html>`);
+  w.document.close();
+}
+
+// ─── PAGE BILAN ÉLÈVE (lecture depuis URL #bilan=...) ─────────────────────────
+function checkBilanMode(){
+  const hash=window.location.hash;
+  if(!hash.startsWith('#bilan='))return false;
+  try{
+    const b64=hash.slice(7);
+    const json=decodeURIComponent(escape(atob(b64)));
+    const p=JSON.parse(json);
+    renderBilanEleve(p);
+    return true;
+  }catch(e){console.error('Bilan decode error:',e);return false;}
+}
+
+function renderBilanEleve(p){
+  document.querySelector('.app-shell').style.display='none';
+  const el=document.createElement('div');
+  el.id='bilan-eleve-page';
+
+  const d={types:p.ty,titre:p.dt,date:p.dd};
+  const isCombo=d.types.length===2;
+  const genre=p.g||'F';
+  const dateStr=p.dd?new Date(p.dd).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';
+  const ck=isCombo?comboKey(d.types):null;
+  const combo=ck?COMBOS[ck]:null;
+  const noteFinale=p.nf;
+
+  // Note finale
+  let noteHtml='';
+  if(noteFinale!=null){
+    noteHtml='<div style="background:#1a1a2e;color:#f5f0e8;border-radius:12px;padding:1.25rem 1.75rem;margin:1.25rem 0;display:flex;justify-content:space-between;align-items:center">'
+      +'<div><div style="font-size:12px;opacity:.6;margin-bottom:3px">'+(combo?combo.label:'Note finale')+'</div></div>'
+      +'<div style="font-family:Georgia,serif;font-size:2.5rem;font-weight:900;color:#d4a843">'+noteFinale+'<span style="font-size:1.2rem;opacity:.7">/20</span></div>'
+      +'</div>';
+  }
+
+  // Commentaire
+  const commentaireHtml=p.cm
+    ?'<div style="background:#fffbf2;border-left:4px solid #d4a843;padding:1rem 1.25rem;border-radius:0 8px 8px 0;margin:1rem 0">'
+      +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#744210;margin-bottom:6px">Commentaire</div>'
+      +'<div style="font-size:13px;color:#1a1a2e;line-height:1.6">'+p.cm+'</div></div>'
+    :'';
+
+  // Épreuves
+  let epHtml='';
+  d.types.forEach(function(type,epIdx){
+    var g=G[type];var pc=PCOL[type];
+    var sel=p.cs||{};
+    var conseilsCibles=getConseilsTextes(type,sel);
+    var conseilsDevoir=CONSEILS_DEVOIR[type];
+    var borderColor=pc.bd;
+    var sep=epIdx>0?'<hr style="border:none;border-top:1.5px solid #e0d9cc;margin:1.5rem 0">':'';
+
+    var epBloc='';
+    var badge='<span style="background:'+pc.bg+';color:'+pc.t+';border:1.5px solid '+pc.bd+';padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700">'+pc.label+'</span>';
+
+    if(g.isTrad){
+      var level=p.cr[type+'_level']||'—';
+      var score10=p.cr[type+'_score10']||'—';
+      var note4=p.cr[type+'_note']||'—';
+      var desc=p.cr[type+'_desc']||'';
+      var cl=LC[level]||{};
+      var niveauConseils=conseilsDevoir&&conseilsDevoir.par_niveau?conseilsDevoir.par_niveau[level]:null;
+      epBloc+=sep+'<div style="margin-bottom:10px">'+badge+'</div>';
+      epBloc+='<div style="display:flex;gap:1.5rem;margin-bottom:10px;flex-wrap:wrap">'
+        +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b6b7a;margin-bottom:3px">Niveau</div>'
+        +'<span style="font-size:18px;font-weight:900;color:'+(cl.t||'#1a1a2e')+'">'+level+'</span></div>'
+        +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b6b7a;margin-bottom:3px">Score</div>'
+        +'<span style="font-size:16px;font-weight:700">'+score10+'/10</span></div>'
+        +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b6b7a;margin-bottom:3px">Note</div>'
+        +'<span style="font-size:18px;font-weight:900">'+note4+'<span style="font-size:12px">/4</span></span></div>'
+        +'</div>';
+      if(desc) epBloc+='<div style="background:#fff;border:1.5px solid '+borderColor+';border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:#1a1a2e;font-style:italic;line-height:1.6">'+desc+'</div>';
+      if(niveauConseils) epBloc+='<div style="font-size:13px;color:#1a1a2e;margin-bottom:10px">'+genrerBilan(niveauConseils.bilan,genre)+'</div>';
+    } else {
+      var critRows=(g.criteres||[]).map(function(c){
+        var lv=p.cr[type+'_'+c.id]||'—';
+        var pts=lv!=='—'?c.scores[lv]||0:0;
+        var desc2=p.cr[type+'_'+c.id+'_desc']||'';
+        var cl2=LC[lv]||{};
+        return '<tr>'
+          +'<td style="padding:7px 10px;font-size:12px;color:#6b6b7a;border-bottom:1px solid #e0d9cc">'+c.name+'</td>'
+          +'<td style="padding:7px 10px;border-bottom:1px solid #e0d9cc"><span style="font-size:12px;font-weight:700;color:'+(cl2.t||'#1a1a2e')+';background:'+(cl2.bg||'#f5f0e8')+';padding:2px 9px;border-radius:20px">'+lv+'</span></td>'
+          +'<td style="padding:7px 10px;font-size:11px;color:#6b6b7a;border-bottom:1px solid #e0d9cc;font-style:italic">'+desc2+'</td>'
+          +'</tr>';
+      }).join('');
+      var total=(g.criteres||[]).reduce(function(a,c){return a+(c.scores[p.cr[type+'_'+c.id]]||0);},0);
+      var row=CONV_TABLE_20.find(function(r){return total>=r.min&&total<=r.max;});
+      var noteChoisie=p.cr[type+'_note'];
+      var niveaux2=(g.criteres||[]).map(function(c){return p.cr[type+'_'+c.id];}).filter(Boolean);
+      var niveauDom=niveaux2.length?LEVELS[Math.round(niveaux2.map(function(l){return LI[l]||0;}).reduce(function(a,b){return a+b;},0)/niveaux2.length)]:'B1';
+      var niveauConseils2=conseilsDevoir&&conseilsDevoir.par_niveau?conseilsDevoir.par_niveau[niveauDom]:null;
+      epBloc+=sep+'<div style="margin-bottom:10px">'+badge+'</div>';
+      epBloc+='<table style="width:100%;border-collapse:collapse;margin-bottom:10px;background:#fff;border-radius:8px;overflow:hidden;border:1.5px solid '+borderColor+'">'
+        +'<thead><tr style="background:'+pc.bg+'">'
+        +'<th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:'+pc.t+'">Critère</th>'
+        +'<th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:'+pc.t+'">Niveau</th>'
+        +'<th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:'+pc.t+'">Descripteur officiel</th>'
+        +'</tr></thead><tbody>'+critRows+'</tbody></table>';
+      epBloc+='<div style="font-size:12px;color:#1a1a2e;margin-bottom:10px">Total : <strong>'+total+' pts</strong>'
+        +(row?' → Plage : <strong style="color:#1a365d">'+row.noteMin+'–'+row.noteMax+'/20</strong> ('+row.label+')':'')
+        +(noteChoisie!=null?' | Ta note : <strong>'+noteChoisie+'/20</strong>':'')
+        +'</div>';
+      if(niveauConseils2) epBloc+='<div style="font-size:13px;color:#1a1a2e;margin-bottom:10px">'+genrerBilan(niveauConseils2.bilan,genre)+'</div>';
+    }
+
+    // Conseils ciblés (communs trad et écrit/oral)
+    if(conseilsCibles.length){
+      epBloc+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:'+pc.t+';margin-bottom:8px">Pour progresser</div>';
+      conseilsCibles.forEach(function(c){
+        epBloc+='<div style="background:#fff;border-left:3px solid '+borderColor+';padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:6px">'
+          +'<div style="font-size:12px;font-weight:600;color:#1a1a2e;margin-bottom:2px">'+c.titre+'</div>'
+          +'<div style="font-size:11px;color:#6b6b7a;line-height:1.5">'+genrerBilan(c.texte,genre)+'</div></div>';
+      });
+    }
+    epHtml+=epBloc;
+  });
+
+  el.innerHTML='<div style="background:#1a1a2e;color:#f5f0e8;padding:1.5rem 2rem">'
+    +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.45);margin-bottom:.5rem">Corrections LLCER · Bilan individuel</div>'
+    +'<div style="font-family:Georgia,serif;font-size:1.5rem;font-weight:900;line-height:1.2">'+p.n+'</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:4px">'+p.dt+(dateStr?' · '+dateStr:'')+(combo?' · '+combo.label:'')+'</div></div>'
+    +'<div style="max-width:760px;margin:0 auto;padding:1.5rem 2rem 4rem;background:#f5f0e8;min-height:100vh">'
+    +noteHtml+commentaireHtml
+    +'<div style="background:#fff;border:1.5px solid #e0d9cc;border-radius:12px;padding:1.5rem">'+epHtml+'</div>'
+    +'<p style="margin-top:2rem;font-size:10px;color:#6b6b7a;text-align:center">Grilles officielles MEN · LLCER Terminale</p>'
+    +'</div>';
+
+  document.body.style.background='#f5f0e8';
+  document.body.appendChild(el);
+}
+
+function saveData(){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify({students,devoirs,nextSId,nextDId,classes,nextClId,conseilsSelectionnes}));
+    updateSaveIndicator(true);
+  }catch(e){showToast('⚠ Erreur de sauvegarde','#9b1c1c');}
+}
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw)return false;
+    const d=JSON.parse(raw);
+    if(d.students)students=d.students;
+    if(d.devoirs)devoirs=d.devoirs;
+    if(d.nextSId)nextSId=d.nextSId;
+    if(d.nextDId)nextDId=d.nextDId;
+    if(d.classes)classes=d.classes;
+    if(d.nextClId)nextClId=d.nextClId;
+    if(d.conseilsSelectionnes)conseilsSelectionnes=d.conseilsSelectionnes;
+    return true;
+  }catch(e){return false;}
+}
+
+function clearData(){
+  document.getElementById('modal-confirm-clear').classList.add('open');
+}
+function clearDataConfirmed(){
+  document.getElementById('modal-confirm-clear').classList.remove('open');
+  localStorage.removeItem(LS_KEY);
+  students=[];devoirs=[];nextSId=1;nextDId=1;conseilsSelectionnes={};
+  renderAll();renderDevoirs();
+  updateSaveIndicator(false);
+  showToast('Données effacées');
+}
+
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({students,devoirs,nextSId,nextDId},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='lumen-ed-sauvegarde-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  showToast('Sauvegarde JSON exportée','#1a5c2e');
+}
+
+function importJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(d.students)students=d.students;
+      if(d.devoirs)devoirs=d.devoirs;
+      if(d.nextSId)nextSId=d.nextSId;
+      if(d.nextDId)nextDId=d.nextDId;
+      saveData();renderAll();renderDevoirs();
+      showToast('Données importées','#1a5c2e');
+    }catch(err){showToast('Fichier invalide','#9b1c1c');}
+  };
+  r.readAsText(file);e.target.value='';
+}
+
+function updateSaveIndicator(saved){
+  const el=document.getElementById('save-indicator');
+  if(!el)return;
+  const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  el.textContent=saved?`✓ Sauvegardé à ${now}`:'Aucune sauvegarde';
+  el.style.color=saved?'#bfdbfe':'rgba(255,255,255,.5)';
+  el.style.background=saved?'rgba(59,130,246,.2)':'rgba(255,255,255,.08)';
+  el.style.borderColor=saved?'rgba(59,130,246,.4)':'rgba(255,255,255,.15)';
+}
+
+/* ── INIT ── */
+const hadData=loadData();
+document.getElementById('dev-date').value=new Date().toISOString().slice(0,10);
+if(!checkBilanMode()){
+  renderAll();
+  if(hadData){updateSaveIndicator(true);showToast('Données chargées depuis la mémoire','#1a5c2e');}
+}
+</script>
+</body>
+</html>
