@@ -339,6 +339,18 @@ h1 span{color:var(--gold);}
   </div>
 </div>
 
+<!-- MODAL CONFIRMATION SUPPRIMER ÉLÈVE -->
+<div class="modal-bg" id="modal-confirm-eleve">
+  <div class="modal" style="max-width:400px">
+    <h3 style="color:#c0392b">Supprimer cet·te élève ?</h3>
+    <p id="modal-confirm-eleve-titre" style="font-size:13px;color:var(--muted);margin:8px 0 1.25rem;line-height:1.6"></p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-confirm-eleve')">Annuler</button>
+      <button class="btn-sm" style="background:#c0392b;color:#fff;border-color:#c0392b" onclick="supprimerEleveConfirmed()">Oui, supprimer</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL CONFIRMATION EFFACER TOUT -->
 <div class="modal-bg" id="modal-confirm-clear">
   <div class="modal" style="max-width:400px">
@@ -744,7 +756,9 @@ function renderFiche(){
       </div>`;
     });
     let finalHtml='';
-    if(p.noteFinaleSur20!=null){
+    if(p.partiel){
+      finalHtml=`<div class="note-display"><span class="note-box" style="background:#fffbf2;border-color:#f6e05e;color:#744210">⏸ En cours</span>${p.noteSur16!=null?`<span class="note-box">Synthèse : ${p.noteSur16}/16</span>`:''}`;finalHtml+=`</div>`;
+  } else if(p.noteFinaleSur20!=null){
       const noteMax=d.types.length===2?20:G[d.types[0]].noteMax;
       finalHtml=`<div class="note-display"><span class="note-box-total">Note finale : ${p.noteFinaleSur20}/${noteMax}</span></div>`;
     }
@@ -761,7 +775,7 @@ function renderFiche(){
     <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.25rem;flex-wrap:wrap;padding-bottom:1.25rem;border-bottom:1px solid var(--b)">
       <div class="avatar" style="background:${av.bg};color:${av.t};width:52px;height:52px;font-size:17px">${initials(s.name)}</div>
       <div><div style="font-size:18px;font-weight:600;color:var(--t)">${s.name}</div><div style="font-size:12px;color:var(--tm);margin-top:2px">${s.productions.length} production${s.productions.length>1?'s':''} corrigée${s.productions.length>1?'s':''}</div></div>
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">${chip(avg)}<button class="btn-sm" onclick="printFiche(${s.id})" title="Générer le bilan élève en PDF">↓ Bilan PDF</button></div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">${chip(avg)}<button class="btn-sm" onclick="printFiche(${s.id})">↓ Bilan PDF</button><button class="btn-sm" style="color:#c0392b;border-color:#f1a9a0" onclick="supprimerEleve(${s.id})">✕ Supprimer</button></div>
     </div>
 
     <div class="section-title">Commentaire audio</div>
@@ -1132,38 +1146,53 @@ function updateGrandTotal(){
   }
 }
 
-function saveCorrection(){
+function saveCorrection(partiel){
   const s=students.find(x=>x.id===corrCtx.eleveId);if(!s)return;
   const d=devoirs.find(x=>x.id===corrCtx.devoirId);
-  // Vérification complète
-  for(const type of d.types){
-    if(corrState[`${type}_note`]==null){
-      showToast(`Choisissez une note pour : ${G[type].label}`,'#9b1c1c');return;
+  // Vérification : si sauvegarde complète, toutes les notes doivent être choisies
+  if(!partiel){
+    for(const type of d.types){
+      if(corrState[`${type}_note`]==null){
+        showToast(`Note manquante : ${G[type].label}`,'#c0392b');return;
+      }
     }
   }
+  // Calcul note finale (seulement si tout est rempli)
   let noteFinaleSur20=null;
-  if(d.types.length===1){
+  const mainType=d.types.find(t=>!G[t].isTrad);
+  const secType=d.types.find(t=>G[t].isTrad);
+  if(d.types.length===1&&corrState[`${d.types[0]}_note`]!=null){
     noteFinaleSur20=corrState[`${d.types[0]}_note`];
-  } else {
-    const mainType=d.types.find(t=>!G[t].isTrad);
-    const secType=d.types.find(t=>G[t].isTrad);
+  } else if(d.types.length===2&&mainType&&secType
+    &&corrState[`${mainType}_note`]!=null&&corrState[`${secType}_note`]!=null){
     const note16=Math.round(corrState[`${mainType}_note`]*4/5*100)/100;
     const note4=corrState[`${secType}_note`];
     noteFinaleSur20=Math.round((note16+note4)*10)/10;
+  }
+  // Note partielle /16 pour un combo avec seulement la partie principale
+  let noteSur16=null;
+  if(d.types.length===2&&mainType&&corrState[`${mainType}_note`]!=null&&secType&&corrState[`${secType}_note`]==null){
+    noteSur16=sur20versur16(corrState[`${mainType}_note`]);
   }
   // Collecter les conseils cochés
   const conseilsSelec={};
   Object.keys(corrState).forEach(k=>{
     if(k.startsWith('conseil_'))conseilsSelec[k.replace('conseil_','')]=corrState[k];
   });
-  s.productions.push({
+  // Créer ou mettre à jour la production
+  let prod=s.productions.find(p=>p.devoirId===corrCtx.devoirId);
+  const data={
     devoirId:corrCtx.devoirId,
     criteres:{...corrState},
     conseilsSelectionnes:conseilsSelec,
     noteFinaleSur20,
+    noteSur16,
+    partiel:partiel||false,
     commentaire:document.getElementById('corr-commentaire').value.trim(),
     date:new Date().toISOString()
-  });
+  };
+  if(prod){Object.assign(prod,data);}
+  else{s.productions.push(data);}
   // Mise à jour compétences CECRL selon les niveaux saisis
   const allLevels=d.types.flatMap(type=>{
     if(G[type].isTrad) return corrState[`${type}_level`]?[corrState[`${type}_level`]]:[];
@@ -1296,6 +1325,22 @@ function supprimerDevoirConfirmed(){
   students.forEach(s=>{ s.productions=s.productions.filter(p=>p.devoirId!==id); });
   document.getElementById('modal-confirm-delete').classList.remove('open');
   renderDevoirs();saveData();showToast('Devoir supprimé');
+}
+
+function supprimerEleve(id){
+  const s=students.find(x=>x.id===id);if(!s)return;
+  const nb=s.productions.length;
+  document.getElementById('modal-confirm-eleve-titre').textContent=
+    `Supprimer ${s.name} ?${nb>0?' Ses '+nb+' correction'+(nb>1?'s':'')+' seront également supprimée'+(nb>1?'s':'')+'.':''}`;
+  document.getElementById('modal-confirm-eleve').dataset.eleveId=id;
+  document.getElementById('modal-confirm-eleve').classList.add('open');
+}
+function supprimerEleveConfirmed(){
+  const id=parseInt(document.getElementById('modal-confirm-eleve').dataset.eleveId);
+  students=students.filter(x=>x.id!==id);
+  document.getElementById('modal-confirm-eleve').classList.remove('open');
+  showPage('eleves');
+  renderAll();saveData();showToast('Élève supprimé·e');
 }
 
 function addStudent(){
@@ -2342,6 +2387,24 @@ function _audioWaveStop(eleveId){
   container.querySelectorAll('.wave-bar').forEach(b=>{b.style.height='4px';b.classList.remove('active');});
 }
 function _audioWaveReset(eleveId){_audioWaveStop(eleveId);}
+
+// ─── GÉNÉRER TOUS LES BILANS D'UN DEVOIR ─────────────────────────────────────
+function genererTousBilans(devoirId){
+  const d=devoirs.find(x=>x.id===devoirId);if(!d)return;
+  const eleves=students.filter(s=>s.productions.find(p=>p.devoirId===devoirId));
+  if(!eleves.length){showToast('Aucune correction pour ce devoir','#c0392b');return;}
+  let idx=0;
+  function next(){
+    if(idx>=eleves.length){showToast(`${eleves.length} bilan${eleves.length>1?'s':''} générés ✓`,'#1c4532');return;}
+    const s=eleves[idx++];
+    // Déclencher printDevoir puis attendre un peu avant le suivant
+    corrCtx={eleveId:s.id,devoirId};
+    printDevoir(s.id,devoirId);
+    setTimeout(next,800);
+  }
+  showToast(`Génération de ${eleves.length} bilan${eleves.length>1?'s':''} en cours…`);
+  next();
+}
 
 // ─── QR CODE & PARTAGE ────────────────────────────────────────────────────────
 function ouvrirQR(eleveId, devoirId){
